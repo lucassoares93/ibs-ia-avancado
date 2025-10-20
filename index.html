@@ -1,0 +1,3173 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IA Aplicada ao Trabalho - Módulo 1 | IBS Americas</title>
+    <style>
+:root {
+  /* IBS Americas Brand Colors */
+  --color-ibs-primary: #1e3a8a;
+  --color-ibs-secondary: #3b82f6;
+  --color-ibs-background: #0f172a;
+  --color-ibs-text: #ffffff;
+  --color-ibs-accent: #60a5fa;
+  --color-ibs-light: #dbeafe;
+  --color-ibs-success: #10b981;
+  --color-ibs-error: #ef4444;
+  --color-ibs-warning: #f59e0b;
+  
+  /* Spacing */
+  --space-2: 0.5rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  
+  /* Typography */
+  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+  
+  /* Transitions */
+  --transition: all 0.3s ease;
+  
+  /* Border radius */
+  --radius: 0.5rem;
+  --radius-lg: 1rem;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family);
+  background: linear-gradient(135deg, var(--color-ibs-background) 0%, var(--color-ibs-primary) 100%);
+  color: var(--color-ibs-text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Progress Bar */
+.progress-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  z-index: 1000;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-ibs-accent), var(--color-ibs-secondary));
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+/* Main Container */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+  padding-top: 4px;
+}
+
+/* Sidebar Navigation */
+.sidebar {
+  width: 320px;
+  background: rgba(30, 58, 138, 0.95);
+  backdrop-filter: blur(10px);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  padding: var(--space-6);
+  overflow-y: auto;
+  position: fixed;
+  height: calc(100vh - 4px);
+  z-index: 100;
+  transform: translateX(-320px);
+  transition: var(--transition);
+}
+
+.sidebar.open {
+  transform: translateX(0);
+}
+
+.sidebar-toggle {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background: var(--color-ibs-primary);
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  z-index: 200;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-toggle:hover {
+  background: var(--color-ibs-secondary);
+}
+
+.sidebar-header {
+  margin-bottom: var(--space-6);
+  text-align: center;
+}
+
+.sidebar-title {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  margin-bottom: var(--space-2);
+}
+
+.sidebar-nav {
+  list-style: none;
+}
+
+.chapter-section {
+  margin-bottom: var(--space-4);
+}
+
+.chapter-header {
+  background: rgba(255, 255, 255, 0.1);
+  padding: var(--space-2);
+  border-radius: var(--radius);
+  margin-bottom: var(--space-2);
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  color: var(--color-ibs-accent);
+}
+
+.nav-item {
+  margin-bottom: var(--space-1);
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  padding: var(--space-2) var(--space-4);
+  color: var(--color-ibs-light);
+  text-decoration: none;
+  border-radius: var(--radius);
+  transition: var(--transition);
+  font-size: var(--font-size-sm);
+}
+
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.nav-link.active {
+  background: var(--color-ibs-accent);
+  color: white;
+}
+
+.nav-link.highlighted {
+  background: var(--color-ibs-warning);
+  color: white;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.nav-link .nav-number {
+  background: rgba(255, 255, 255, 0.2);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: var(--space-2);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.nav-link.active .nav-number {
+  background: white;
+  color: var(--color-ibs-primary);
+}
+
+.nav-link.highlighted .nav-number {
+  background: white;
+  color: var(--color-ibs-warning);
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  margin-left: 0;
+  transition: var(--transition);
+}
+
+.sidebar.open ~ .main-content {
+  margin-left: 320px;
+}
+
+/* Slide Container */
+.slide-container {
+  min-height: calc(100vh - 4px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-8);
+  position: relative;
+}
+
+.slide {
+  display: none;
+  width: 100%;
+  max-width: 900px;
+  text-align: center;
+  animation: slideIn 0.5s ease-out;
+}
+
+.slide.active {
+  display: block;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Slide Content */
+.slide-header {
+  margin-bottom: var(--space-8);
+}
+
+.slide-title {
+  font-size: var(--font-size-4xl);
+  font-weight: 700;
+  margin-bottom: var(--space-4);
+  background: linear-gradient(135deg, var(--color-ibs-accent), var(--color-ibs-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.slide-subtitle {
+  font-size: var(--font-size-xl);
+  color: var(--color-ibs-light);
+  margin-bottom: var(--space-2);
+}
+
+.slide-content {
+  font-size: var(--font-size-lg);
+  line-height: 1.6;
+  margin-bottom: var(--space-8);
+  text-align: left;
+  background: rgba(255, 255, 255, 0.05);
+  padding: var(--space-6);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.slide-content h3 {
+  color: var(--color-ibs-accent);
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--space-4);
+}
+
+.slide-content ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.slide-content li {
+  margin-bottom: var(--space-2);
+  padding-left: var(--space-4);
+  position: relative;
+}
+
+.slide-content li::before {
+  content: '▸';
+  color: var(--color-ibs-accent);
+  position: absolute;
+  left: 0;
+  font-weight: bold;
+}
+
+.slide-content strong {
+  color: var(--color-ibs-accent);
+}
+
+/* Quiz Styles */
+.quiz-container {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: left;
+  max-width: 1000px;
+}
+
+.quiz-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-6);
+}
+
+.quiz-question {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  margin-bottom: var(--space-6);
+  color: var(--color-ibs-accent);
+  line-height: 1.4;
+}
+
+.quiz-progress {
+  font-size: var(--font-size-sm);
+  color: var(--color-ibs-light);
+  background: rgba(255, 255, 255, 0.1);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius);
+}
+
+.quiz-options {
+  list-style: none;
+  margin-bottom: var(--space-6);
+}
+
+.quiz-option {
+  margin-bottom: var(--space-2);
+}
+
+.quiz-option label {
+  display: flex;
+  align-items: flex-start;
+  padding: var(--space-4);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: var(--transition);
+  border: 2px solid transparent;
+  min-height: 60px;
+  text-align: left;
+}
+
+.quiz-option label:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.quiz-option input[type="radio"] {
+  margin-right: var(--space-4);
+  transform: scale(1.2);
+  margin-top: var(--space-1);
+  flex-shrink: 0;
+}
+
+.quiz-option.correct label {
+  background: rgba(16, 185, 129, 0.2);
+  border-color: var(--color-ibs-success);
+}
+
+.quiz-option.incorrect label {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: var(--color-ibs-error);
+}
+
+.quiz-option:disabled label {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.quiz-feedback {
+  background: rgba(16, 185, 129, 0.1);
+  padding: var(--space-4);
+  border-radius: var(--radius);
+  border-left: 4px solid var(--color-ibs-success);
+  margin-top: var(--space-4);
+  display: none;
+}
+
+.quiz-feedback.show {
+  display: block;
+  animation: slideIn 0.3s ease-out;
+}
+
+.quiz-feedback.error {
+  background: rgba(239, 68, 68, 0.1);
+  border-left-color: var(--color-ibs-error);
+}
+
+.quiz-feedback.warning {
+  background: rgba(245, 158, 11, 0.1);
+  border-left-color: var(--color-ibs-warning);
+}
+
+.quiz-attempts {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+  margin-bottom: var(--space-4);
+}
+
+.attempt-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.attempt-indicator.used {
+  background: var(--color-ibs-error);
+}
+
+.quiz-results {
+  background: rgba(255, 255, 255, 0.05);
+  padding: var(--space-6);
+  border-radius: var(--radius-lg);
+  margin-top: var(--space-6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.result-success {
+  border-left: 4px solid var(--color-ibs-success);
+}
+
+.result-failure {
+  border-left: 4px solid var(--color-ibs-error);
+}
+
+/* Navigation Buttons */
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--space-8);
+  gap: var(--space-4);
+}
+
+.btn {
+  padding: var(--space-4) var(--space-6);
+  border: none;
+  border-radius: var(--radius);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.btn-primary {
+  background: var(--color-ibs-accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--color-ibs-secondary);
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-ibs-light);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.slide-counter {
+  background: rgba(255, 255, 255, 0.1);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius);
+  font-size: var(--font-size-sm);
+  color: var(--color-ibs-light);
+}
+
+/* Conclusion Screen */
+.conclusion-slide {
+  text-align: center;
+}
+
+.celebration {
+  font-size: 4rem;
+  margin-bottom: var(--space-4);
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+.next-steps {
+  background: rgba(255, 255, 255, 0.05);
+  padding: var(--space-6);
+  border-radius: var(--radius-lg);
+  margin: var(--space-6) 0;
+  text-align: left;
+}
+
+.next-steps h3 {
+  color: var(--color-ibs-accent);
+  margin-bottom: var(--space-4);
+}
+
+/* Recovery Mode */
+.recovery-mode {
+  background: rgba(245, 158, 11, 0.1);
+  border: 2px solid var(--color-ibs-warning);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  margin-bottom: var(--space-6);
+}
+
+.recovery-title {
+  color: var(--color-ibs-warning);
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  margin-bottom: var(--space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.recovery-content {
+  margin-bottom: var(--space-4);
+}
+
+.recovery-concepts {
+  background: rgba(255, 255, 255, 0.1);
+  padding: var(--space-4);
+  border-radius: var(--radius);
+  margin-top: var(--space-4);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    transform: translateX(-100%);
+  }
+  
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  
+  .sidebar.open ~ .main-content {
+    margin-left: 0;
+  }
+  
+  .slide-title {
+    font-size: var(--font-size-3xl);
+  }
+  
+  .slide-content {
+    font-size: var(--font-size-base);
+  }
+  
+  .slide-container {
+    padding: var(--space-4);
+  }
+  
+  .navigation {
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  
+  .quiz-header {
+    flex-direction: column;
+    gap: var(--space-2);
+    align-items: stretch;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar-toggle {
+    top: 10px;
+    left: 10px;
+    width: 36px;
+    height: 36px;
+  }
+  
+  .slide-title {
+    font-size: var(--font-size-2xl);
+  }
+  
+  .slide-container {
+    padding: var(--space-2);
+  }
+}
+
+/* Overlay for mobile sidebar */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 50;
+  display: none;
+}
+
+.sidebar-overlay.show {
+  display: block;
+}
+    
+/* === IBS palette overrides === */
+body { background: #053268 !important; color: #ffffff; }
+.slide-title { color: #EF7D00 !important; background: none !important; -webkit-text-fill-color: initial !important; }
+.slide-content, .slide-content p, .slide-content li { color: #ffffff !important; }
+.slide-content strong, .slide strong, b { color: #27DAF5 !important; }
+.btn-primary { background: #EF7D00 !important; color: #fff !important; border: none !important; }
+.btn-secondary { background: #27DAF5 !important; color: #fff !important; border: none !important; }
+.btn-success { background: #10B981 !important; color: #fff !important; border: none !important; }
+.nav-link.locked { opacity: .5 !important; pointer-events: none !important; }
+.nav-link.locked::after { content: " 🔒"; }
+.review-highlight { background: rgba(255,255,255,0.12); border-left: 4px solid #EF7D00; padding: 12px 14px; border-radius: 8px; margin-bottom: 12px; }
+
+
+/* === Adjustments per IBS requests === */
+/* Títulos mais próximos do texto que lhes pertence */
+.slide-content h3 { margin-top: 1.25rem !important; margin-bottom: 0.25rem !important; line-height: 1.25 !important; }
+.slide-content h3 + p, .slide-content h4 + p { margin-top: 0.25rem !important; }
+
+/* Botão Próximo laranja IBS (reforço) */
+.btn-primary { background: #EF7D00 !important; color: #fff !important; border: none !important; }
+
+/* Botão Revisar (amarelo para destaque) */
+.review-btn, .btn-review {
+  background: #FFD400 !important;
+  color: #053268 !important;
+  border: none !important;
+  padding: 0.75rem 1rem !important;
+  border-radius: 8px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+}
+
+/* Quiz no menu lateral deve destacar como ativo */
+.nav-link.quiz-active { background: var(--color-ibs-accent) !important; color: #fff !important; }
+.nav-link.quiz-active .nav-number { background: #fff !important; color: var(--color-ibs-primary) !important; }
+
+/* Substituição da antiga paleta secundária já aplicada acima (#27DAF5) */
+
+/* Contêiner de progresso em texto abaixo dos botões */
+.module-progress {
+  background: rgba(255,255,255,0.10);
+  padding: 0.25rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  color: var(--color-ibs-light);
+  min-width: 130px;
+  text-align: center;
+}
+
+
+/* === v2 Adjustments === */
+/* Progress text fixed at top-right */
+.module-progress-fixed {
+  position: fixed;
+  top: 6px;
+  right: 12px;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(6px);
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  color: #fff;
+  z-index: 1100;
+  border: 1px solid rgba(255,255,255,0.18);
+}
+
+/* Improve headings proximity: h3 closer to its description, farther from previous block */
+.slide-content h3 { margin-top: 1.25rem !important; margin-bottom: 0.25rem !important; line-height: 1.25 !important; }
+.slide-content p { margin: 0 0 1rem 0 !important; }
+/* Also for h4 blocks */
+.slide-content h4 { margin-top: 1rem !important; margin-bottom: 0.25rem !important; }
+
+/* Center the review button when attempts are exhausted */
+.quiz-feedback .review-btn-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+.review-btn { cursor: pointer !important; }
+
+
+/* === v3 Adjustments === */
+/* Hide bottom navigation when on a quiz slide */
+.slide.active[id^="slide-quiz-"] ~ .navigation {
+  display: none !important;
+}
+
+/* Uniform button height for Review button */
+.review-btn {
+  height: 48px !important;
+  line-height: 48px !important;
+  padding: 0 1.5rem !important;
+}
+
+/* Style for feedback message before review button */
+.quiz-feedback .review-instruction {
+  display: block;
+  text-align: center;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+  color: #fff;
+  opacity: 0.9;
+}
+
+
+/* === v6 Adjustments === */
+/* Fullscreen completion modal */
+.completion-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+.completion-card {
+  background: #0f172a;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 14px;
+  padding: 28px 32px;
+  max-width: 640px;
+  width: 92%;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+}
+.completion-card .celebration { font-size: 56px; margin-bottom: 8px; }
+.completion-card h2 { margin: 0 0 6px 0; }
+.completion-card p { margin: 0 0 16px 0; opacity: .95; }
+
+/* Review message above the button */
+.quiz-feedback .review-instruction {
+  display: block;
+  text-align: center;
+  margin: 8px 0 8px 0;
+  font-size: .95rem;
+  color: #fff;
+  opacity: .9;
+}
+
+/* Ensure any legacy "" styles are moot */
+.review-btn .ler-conteudo, .btn-review.ler-conteudo { display: none !important; }
+
+
+/* === Menu lock state (disable menu when reviewing content) === */
+.menu-locked #sidebarToggle { pointer-events: none; opacity: 0.5; cursor: not-allowed; }
+.menu-locked .sidebar { pointer-events: none; }
+.menu-locked .nav-link { pointer-events: none !important; opacity: 0.5 !important; }
+
+
+
+/* Esconde navegação e CTA de quiz por capítulo na tela final */
+.at-conclusao #prevBtn { display: none !important; }
+
+
+
+/* Esconde navegação e CTA de quiz por capítulo na tela final (detecção segura) */
+.at-conclusao #prevBtn { display: none !important; }
+
+
+
+/* Esconde 'Anterior' apenas na conclusão real */
+.at-conclusao #prevBtn { display: none !important; }
+
+
+
+/* Ocultar Anterior e Próximo somente na tela final real (backup CSS) */
+.at-conclusao #prevBtn,
+.at-conclusao #nextBtn { display: none !important; }
+
+
+
+/* Esconder navegação quando o slide de conclusão estiver ativo (CSS puro, sem JS) */
+#slide-conclusion.active + .navigation #prevBtn,
+#slide-conclusion.active + .navigation #nextBtn { display: none !important; }
+
+</style>
+</head>
+<body
+  >
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="module-progress-fixed" id="moduleProgressText">Progresso: 0%</div>
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Sidebar Toggle -->
+    <button class="sidebar-toggle" id="sidebarToggle">
+        ☰
+    </button>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div id="completionModal" class="completion-modal">
+  <div class="completion-card">
+    <div class="celebration">🎉</div>
+    <h2>Parabéns!</h2>
+    <p>Você concluiu o quiz deste capítulo com sucesso!<br>Agora siga para o próximo capítulo e continue sua jornada.</p>
+    <button class="btn btn-success" id="completionNextBtn">Próximo capítulo →</button>
+  </div>
+</div>
+<div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-title">IBS Americas</div>
+                <div style="font-size: 0.875rem; color: #dbeafe;">IA Aplicada ao Trabalho - M1</div>
+            </div>
+            <ul class="sidebar-nav" id="sidebarNav">
+                <!-- Navigation items will be generated by JavaScript -->
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="slide-container">
+                <!-- Slides will be generated by JavaScript -->
+
+                <!-- Navigation -->
+                <div class="navigation">
+                    <button class="btn btn-secondary" id="prevBtn" style="display: none;" disabled>
+                        ← Anterior
+                    </button>
+                    
+                    
+                    
+                    <button class="btn btn-primary" id="nextBtn">
+                        Próximo →
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Module 1 Data
+        const moduloInfo = {
+            title: "IA Aplicada ao Trabalho",
+            subtitle: "Módulo 1: Técnicas Avançadas de Prompting & Criação de Documentos com IA",
+            description: "Transformar prompts básicos em ferramentas profissionais para criar documentos, planilhas e comunicações de alta precisão"
+        };
+
+        const capitulos = [
+            {
+                numero: 1,
+                nome: "Entendendo o CATE",
+                descricao: "A base para prompts profissionais",
+                slides: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+            },
+            {
+                numero: 2,
+                nome: "Criação de documentos estratégicos",
+                descricao: "Matrizes RACI, análises, relatórios e apresentações",
+                slides: [12, 13, 14, 15]
+            },
+            {
+                numero: 3,
+                nome: "Adaptação cultural de comunicações",
+                descricao: "Revisar textos para Brasil, Latam e Americas",
+                slides: [16, 17, 18]
+            },
+            {
+                numero: 4,
+                nome: "Avaliação e documentação",
+                descricao: "Checklists, checagem e versionamento",
+                slides: [19, 20, 21, 22]
+            }
+        ];
+
+        const slidesData = [
+            {
+                numero: 1,
+                capitulo: 1,
+                titulo: "IA Aplicada ao Trabalho",
+                subtitulo: "Módulo 1: Técnicas Avançadas de Prompting & Criação de Documentos com IA",
+                conteudo: `Transformar prompts básicos em ferramentas profissionais para criar documentos, planilhas e comunicações de alta precisão`,
+                tipo: 'intro',
+                sem_anterior: true
+            },
+            {
+                numero: 2,
+                capitulo: 1,
+                titulo: "Objetivos do Módulo",
+                conteudo: `<h3>01 - Dominar o método CATE</h3>
+<p>Estruturar prompts profissionais com Contexto, Ângulo, Tarefa e Estilo para comunicações e documentos da IBS Americas</p>
+<h3>02 - Criar documentos estratégicos com IA</h3>
+<p>Matrizes RACI, análises de planilhas, relatórios, briefs de decisão e apresentações</p>
+<h3>03 - Adaptar culturalmente comunicações</h3>
+<p>Revisar e ajustar e-mails e textos para públicos Brasil, Latam e Americas</p>
+<h3>04 - Avaliar saídas com critérios objetivos</h3>
+<p>Aplicar checklists de qualidade, checagem factual e validação de links parametrizados</p>
+<h3>05 - Documentar e versionar prompts</h3>
+<p>Registrar prompts reutilizáveis com ficha de versionamento para uso institucional</p>`,
+                tipo: 'conteudo'
+            },
+            {
+                numero: 3,
+                capitulo: 1,
+                titulo: "Pré-requisitos & Contexto",
+                conteudo: `<h3>Pré-requisitos</h3>
+<ul>
+<li>Conceitos do M0 – Fundamentos de IA generativa, prompts básicos, PII e checagem factual</li>
+<li>Acesso ao Chat do Microsoft 365 Copilot – Login institucional (A1/A3)</li>
+<li>Familiaridade com rotinas IBS Americas – Comunicações multilingues (PT/ES/EN)</li>
+</ul>
+<h3>Por que este módulo importa?</h3>
+<p>Na IBS Americas, você lida diariamente com e-mails institucionais multilíngues, landing pages com links parametrizados, comunicações entre áreas e documentos estratégicos.</p>
+<p>Prompts estruturados com CATE entregam qualidade, consistência e rastreabilidade.</p>`,
+                tipo: 'conteudo'
+            },
+            {
+                numero: 4,
+                capitulo: 1,
+                titulo: "Microsoft 365 Copilot — sua ferramenta de trabalho segura",
+                conteudo: `<ul>
+<li><strong>Segurança de dados:</strong> Conteúdos processados no chat não treinam modelos públicos</li>
+<li><strong>Uso de dados sensíveis:</strong> Dados sensíveis tratados de forma segura quando necessário</li>
+<li><strong>Histórico corporativo:</strong> Conversas ficam no ambiente institucional, não em plataformas públicas</li>
+<li><strong>Login institucional:</strong> Acesso com e-mail @ibs-americas.com</li>
+</ul>
+<div style=\"background: rgba(239,68,68,0.15); border-left: 4px solid #ef4444; padding: 12px; border-radius: 8px; margin-top: 12px;\">
+<strong>NUNCA</strong> use ChatGPT, Gemini ou Claude públicos para dados sensíveis da IBS Americas.
+</div>`,
+                tipo: 'conteudo'
+            },
+            {
+                numero: 5,
+                capitulo: 1,
+                titulo: "Estrutura do Módulo",
+                conteudo: `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+<div style="border-left: 4px solid #3b82f6; padding: 1rem; border-radius: 0.5rem; background: rgba(255,255,255,0.05);">
+<h4 style="color: var(--color-ibs-accent);">Capítulo 1</h4>
+<p>Entendendo o CATE – a base para prompts profissionais</p>
+</div>
+<div style="border-left: 4px solid #10b981; padding: 1rem; border-radius: 0.5rem; background: rgba(255,255,255,0.05);">
+<h4 style="color: var(--color-ibs-accent);">Capítulo 2</h4>
+<p>Criação de documentos e planilhas estratégicas com IA</p>
+</div>
+<div style="border-left: 4px solid #f59e0b; padding: 1rem; border-radius: 0.5rem; background: rgba(255,255,255,0.05);">
+<h4 style="color: var(--color-ibs-accent);">Capítulo 3</h4>
+<p>Adaptação cultural e revisão multilíngue de comunicações</p>
+</div>
+<div style="border-left: 4px solid #ef4444; padding: 1rem; border-radius: 0.5rem; background: rgba(255,255,255,0.05);">
+<h4 style="color: var(--color-ibs-accent);">Capítulo 4</h4>
+<p>Avaliação, checagem e documentação de prompts para reuso</p>
+</div>
+</div>`,
+                tipo: 'conteudo'
+            },
+            {
+                numero: 6,
+                capitulo: 1,
+                titulo: "Capítulo 1: O que é CATE?",
+                conteudo: `<h3>O problema</h3>
+<p>Quando você pede à IA "Escreva um e-mail para um aluno", o resultado costuma ser genérico, impessoal e impreciso. Falta contexto, direcionamento e clareza.</p>
+<h3>A solução</h3>
+<p>CATE é um método estruturado para criar prompts profissionais e eficazes.</p>
+<div style="border-left: 4px solid var(--color-ibs-secondary); padding: 1rem; border-radius: 0.5rem; margin-top: 1rem; background: rgba(255,255,255,0.05);">
+<h4 style="color: var(--color-ibs-accent);">C – Contexto</h4>
+<p>Quem você é, onde está, quando, por quê</p>
+<h4 style="color: var(--color-ibs-accent);">A – Ângulo</h4>
+<p>Perspectiva, tom e considerações culturais</p>
+<h4 style="color: var(--color-ibs-accent);">T – Tarefa</h4>
+<p>O que você quer que a IA faça, de forma específica</p>
+<h4 style="color: var(--color-ibs-accent);">E – Estilo</h4>
+<p>Formato de saída e critérios de qualidade</p>
+</div>
+<p>Ao organizar seu prompt em torno dessas quatro dimensões, você transforma uma instrução vaga em um comando preciso que a IA consegue executar com qualidade profissional.</p>`,
+                tipo: 'conteudo'
+            },
+            {
+                numero: 7,
+                capitulo: 1,
+                titulo: "Por que e quando usar o CATE?",
+                conteudo: `<h3>A IA não é mágica – ela precisa de instruções claras</h3>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+<div>
+<h4 style="color: var(--color-ibs-accent);">Reduz ambiguidade</h4>
+<p>A IA não precisa "adivinhar" o que você quer</p>
+</div>
+<div>
+<h4 style="color: var(--color-ibs-accent);">Aumenta relevância</h4>
+<p>Resultados alinhados ao seu contexto e objetivo real</p>
+</div>
+<div>
+<h4 style="color: var(--color-ibs-accent);">Economiza tempo</h4>
+<p>Menos iterações de ajuste, menos retrabalho</p>
+</div>
+<div>
+<h4 style="color: var(--color-ibs-accent);">Garante consistência</h4>
+<p>Prompts documentados podem ser reutilizados</p>
+</div>
+</div>
+<h3 style="margin-top: 2rem;">Quando usar o CATE na IBS Americas?</h3>
+<ul>
+<li>E-mails institucionais para alunos, parceiros, colaboradores</li>
+<li>Comunicações multilíngues – Adaptação cultural entre PT, ES e EN</li>
+<li>Documentos estratégicos – Matrizes RACI, briefs, relatórios</li>
+<li>Análises de dados – Interpretação de relatórios/planilhas</li>
+<li>Criação de conteúdo – Apresentações, landing pages</li>
+<li>Revisão e QA – Checagem de links parametrizados</li>
+<li>Processos recorrentes – Atividades documentadas para reuso</li>
+</ul>`,
+                tipo: 'conteudo'
+            },
+            {
+                numero: 8,
+                capitulo: 1,
+                titulo: "CATE na prática: visão geral",
+                conteudo: `<h3>Como estruturar um prompt com CATE</h3>
+<div style="border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 0.5rem; margin-top: 1rem;">
+<p><strong>1. Contexto:</strong> Sou [cargo/função] da IBS Americas. [Situação atual e objetivo da tarefa].</p>
+<p><strong>2. Ângulo:</strong> Tom [amigável/formal/institucional], adequado ao público [aluno/parceiro/colaborador]. [Considerações culturais].</p>
+<p><strong>3. Tarefa:</strong> [Ação concreta] aplicando os seguintes critérios: [lista de requisitos específicos].</p>
+<p><strong>4. Estilo:</strong> Formato: [e-mail/tabela/relatório], [número de palavras/seções]. [Estrutura esperada]. [Critérios de qualidade].</p>
+</div>`,
+                tipo: 'conteudo'
+            },
+            {
+                numero: 9,
+                capitulo: 1,
+                titulo: "C de Contexto: definição e exemplos",
+                conteudo: `<h3>Contexto: a base de tudo</h3>
+<p>O Contexto responde às perguntas fundamentais: <strong>Quem você é?</strong> Qual é seu cargo na IBS Americas? <strong>Onde você está?</strong> Em qual área? <strong>Quando isso acontece?</strong> É urgente? Há prazos? <strong>Por quê você precisa disso?</strong> Qual é o objetivo final?</p>
+<h4 style="margin-top: 2rem; color: var(--color-ibs-accent);">Exemplos práticos IBS Americas:</h4>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem;">
+<div style="border-left: 4px solid #3b82f6; padding: 1rem; border-radius: 0.5rem; background: rgba(255,255,255,0.05);">
+<h5 style="color: #60a5fa;">Área de Mídias</h5>
+<p>"Sou analista de Mídias da IBS Americas. Gerencio campanhas multilingues (PT/ES/EN) para programas de verão e inverno. Preciso garantir que todos os links parametrizados estejam corretos antes de lançar a campanha JAN25 para Latam."</p>
+</div>
+<div style="border-left: 4px solid #10b981; padding: 1rem; border-radius: 0.5rem; background: rgba(255,255,255,0.05);">
+<h5 style="color: #10b981;">Área de Admissões</h5>
+<p>"Sou coordenador de Admissões da IBS Americas. Recebo diariamente dúvidas de alunos em fase pré-embarque sobre documentação, seguro viagem, housing e visto. Preciso padronizar respostas para reduzir tempo de atendimento."</p>
+</div>
+<div style="border-left: 4px solid #f59e0b; padding: 1rem; border-radius: 0.5rem; background: rgba(255,255,255,0.05);">
+<h5 style="color: #f59e0b;">Área Financeira</h5>
+<p>"Sou assistente financeiro da IBS Americas. Acompanho inadimplência de alunos com parcelas em atraso. Cada aluno tem plano de pagamento personalizado. Preciso enviar lembretes amigáveis e oferecer opções de negociação."</p>
+</div>
+</div>`,
+                tipo: 'conteudo'
+            },
+            {
+                numero: 10,
+                capitulo: 1,
+                titulo: "A de Ângulo: definição e exemplos",
+                conteudo: `<h3>Ângulo: perspectiva e tom da comunicação</h3>
+<p>O Ângulo define <strong>COMO</strong> você quer que a mensagem seja transmitida. De qual perspectiva você fala? Qual é o tom adequado? Para quem você está falando? Quais considerações culturais importam?</p>
+<div style="display: grid; grid-template-columns: 1fr; gap: 1rem; margin-top: 1rem;">
+<div style="border-left: 4px solid #3b82f6; padding: 1rem; border-radius: 0.5rem; background: rgba(255,255,255,0.05);">
+<h4 style="color: #60a5fa;">E-mail para aluno</h4>
+<p>Tom institucional, respeitoso e acolhedor, reforçando que a IBS Americas está junto no processo. Evitar juridiquês. Linguagem acessível e próxima. Evitar informalidade excessiva.</p>
+</div>
+<div style="border-left: 4px solid #10b981; padding: 1rem; border-radius: 0.5rem; background: rgba(255,255,255,0.05);">
+<h4 style="color: #10b981;">E-mail para parceiro universitário</h4>
+<p>Tom institucional e colaborativo, destacando parceria de longo prazo e benefícios mútuos. Linguagem formal mas calorosa.</p>
+</div>
+<div style="border-left: 4px solid #6b7280; padding: 1rem; border-radius: 0.5rem; background: rgba(255,255,255,0.05);">
+<h4 style="color: #6b7280;">Comunicação interna</h4>
+<p>Tom direto e objetivo, com foco em ação e prazos. Evitar rodeios. Linguagem clara e profissional, sem excessos de formalidade.</p>
+</div>
+</div>`,
+                tipo: 'conteudo'
+            },
+            {
+                numero: 11,
+                capitulo: 1,
+                titulo: "T de Tarefa e E de Estilo: exemplos",
+                conteudo: `<h3>Tarefa: a ação concreta que você quer</h3>
+<p>A Tarefa é o núcleo do seu prompt. Ela define exatamente <strong>O QUE</strong> você quer que a IA faça. Uma boa Tarefa deve ser: <strong>Específica, Mensurável, Executável e Completa.</strong></p>
+<h3 style="margin-top:2rem;">Estilo: o formato da saída</h3>
+<p>O Estilo define <strong>COMO</strong> você quer receber a resposta. Qual o formato de saída e quais os critérios de qualidade?</p>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem;">
+<div style="border-left: 4px solid #3b82f6; padding: 1rem; border-radius: 0.5rem; background: rgba(255,255,255,0.05);">
+<h4 style="color: #60a5fa;">Revisão de e-mail</h4>
+<p><strong>Tarefa:</strong> Revisar e-mail aplicando checklist de QA. <strong>Estilo:</strong> Tabela com 2 colunas (Item verificado | Status).</p>
+</div>
+<div style="border-left: 4px solid #10b981; padding: 1rem; border-radius: 0.5rem; background: rgba(255,255,255,0.05);">
+<h4 style="color: #10b981;">Análise de planilha</h4>
+<p><strong>Tarefa:</strong> Identificar 3 insights acionáveis dos dados. <strong>Estilo:</strong> Relatório em bullet points, com no máximo 200 palavras.</p>
+</div>
+<div style="border-left: 4px solid #f59e0b; padding: 1rem; border-radius: 0.5rem; background: rgba(255,255,255,0.05);">
+<h4 style="color: #f59e0b;">Criação de matriz RACI</h4>
+<p><strong>Tarefa:</strong> Criar matriz RACI para o projeto X. <strong>Estilo:</strong> Tabela com 5 colunas (Atividade, R, A, C, I).</p>
+</div>
+</div>`,
+                tipo: 'conteudo'
+            },
+            {
+                numero: 12,
+                capitulo: 2,
+                titulo: "Capítulo 2: Criação de documentos estratégicos",
+                conteudo: `<h2>CATE vai além de e-mails</h2>
+<p>Com o método CATE, você pode analisar e criar documentos estratégicos e operacionais essenciais para a rotina da IBS Americas, como por exemplo:</p>
+<ul>
+<li><strong>Matrizes RACI:</strong> Responsável, Aprovador, Consultado, Informado</li>
+<li><strong>Análises de planilhas:</strong> Power BI, leads, inadimplência</li>
+<li><strong>Briefs de decisão:</strong> Trade-offs, riscos, recomendações</li>
+<li><strong>Relatórios executivos:</strong> Síntese, insights, próximos passos</li>
+<li><strong>Conteúdo para apresentações:</strong> Estrutura, títulos, bullets</li>
+<li><strong>Checklists operacionais:</strong> QA de campanhas, validação de dados</li>
+</ul>`,
+                tipo: 'conteudo'
+            },
+            {
+                numero: 13,
+                capitulo: 2,
+                titulo: "Exemplo: Criar matriz RACI com CATE",
+                conteudo: `<h3>Cenário: Lançamento da campanha JAN25 envolvendo Universidades, Mídias e Admissões</h3>
+<div style="border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 0.5rem; margin-top: 1rem;">
+<p><strong style="color: var(--color-ibs-accent);">1. Contexto:</strong> Sou um colaborador da IBS Americas trabalhando no lançamento da campanha JAN25 para programas de verão. O projeto envolve as áreas de Universidades, Mídias e Admissão.</p>
+<p><strong style="color: var(--color-ibs-accent);">2. Ângulo:</strong> Visão clara de responsabilidades para evitar retrabalho e garantir alinhamento entre as áreas.</p>
+<p><strong style="color: var(--color-ibs-accent);">3. Tarefa:</strong> Criar matriz RACI detalhando as atividades: criação de landing pages, configuração de links parametrizados e vouchers, aprovação de textos multilingues (PT/ES/EN), criação de artes e envio de e-mails de campanha.</p>
+<p><strong style="color: var(--color-ibs-accent);">4. Estilo:</strong> Tabela com 5 colunas (Atividade, Responsável, Aprovador, Consultado, Informado) e 5 linhas. Linguagem clara e objetiva.</p>
+</div>
+<div style="border-left: 4px solid var(--color-ibs-success); padding: 1rem; border-radius: 0.5rem; margin-top: 1rem; background: rgba(255,255,255,0.05);">
+<p><strong>Resultado:</strong> Matriz RACI completa, alinhada às áreas da IBS Americas, pronta para uso no projeto.</p>
+</div>`,
+                tipo: 'conteudo'
+            },
+            {
+                numero: 14,
+                capitulo: 2,
+                titulo: "Exemplo: Análise de planilha de leads do Power BI",
+                conteudo: `<h3>Cenário: Relatório semanal de leads do Power BI para reunião com a equipe</h3>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 1rem;">
+<div>
+<h4 style="color: var(--color-ibs-accent);">Contexto</h4>
+<p>Sou colaborador de Mídias e extraí a planilha de leads da última semana.</p>
+<h4 style="color: var(--color-ibs-accent); margin-top: 1.5rem;">Ângulo</h4>
+<p>Narrativa clara para apoiar tomada de decisão.</p>
+</div>
+<div>
+<h4 style="color: var(--color-ibs-accent);">Tarefa</h4>
+<p>Analisar e identificar: (1) países com maior volume de leads, (2) canais com melhor performance, (3) taxa de conversão por curso, (4) leads estagnados. Gerar insights e recomendações.</p>
+<h4 style="color: var(--color-ibs-accent); margin-top: 1.5rem;">Estilo</h4>
+<p>Relatório executivo com 4 seções: Principais números, Insights, Riscos/Oportunidades, Recomendações. Máximo 300 palavras. Incluir sugestão de visualizações gráficas.</p>
+</div>
+</div>
+<div style="border-left: 4px solid var(--color-ibs-warning); padding: 1rem; border-radius: 0.5rem; margin-top: 2rem; background: rgba(255,255,255,0.05);">
+<p><strong>Importante:</strong> Como sabemos, o PowerBI já identifica os dados acima, porém, ele não dispõe de uma IA avançada que é capaz de sugerir próximos passos.</p>
+</div>`,
+                tipo: 'conteudo'
+            },
+            {
+                numero: 15,
+                capitulo: 2,
+                titulo: "Exemplo: Criar conteúdo para apresentação com template PPT",
+                conteudo: `<h3>Cenário: Apresentação institucional sobre programas de verão 2025 para parceiros universitários</h3>
+<div style="border-left: 4px solid var(--color-ibs-warning); padding: 1rem; border-radius: 0.5rem; margin-top: 1rem; background: rgba(255,255,255,0.05);">
+<p><strong>IMPORTANTE:</strong> A IBS Americas possui um template oficial de PowerPoint. O uso da IA é para criar o <strong>conteúdo</strong> dos slides (títulos, bullets, textos), não o design visual.</p>
+</div>
+<div style="border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 0.5rem; margin-top: 1rem;">
+<p><strong style="color: var(--color-ibs-accent);">1. Contexto:</strong> Sou colaborador da IBS Americas. Preciso criar apresentação institucional sobre programas de verão 2025 (EUA e Europa) para parceiros universitários.</p>
+<p><strong style="color: var(--color-ibs-accent);">2. Ângulo:</strong> Tom institucional e colaborativo, destacando oportunidades de parceria de longo prazo.</p>
+<p><strong style="color: var(--color-ibs-accent);">3. Tarefa:</strong> Criar estrutura e conteúdo para 8 slides: Capa, Sobre a IBS Americas, Programas de Verão 2025, Diferenciais, Perfil dos alunos, Processo de parceria, Cases de sucesso, Próximos passos. Para cada: título e 3-4 bullets.</p>
+<p><strong style="color: var(--color-ibs-accent);">4. Estilo:</strong> Linguagem clara, bullets curtos (máx. 15 palavras), foco em benefícios. Apenas conteúdo textual – design seguirá template PPT oficial.</p>
+</div>`,
+                tipo: 'conteudo'
+            },
+            {
+                numero: 16,
+                capitulo: 3,
+                titulo: "Capítulo 3: Adaptação cultural de comunicações",
+                conteudo: `<h3>Por que adaptação cultural importa?</h3>
+<p>A IBS Americas opera em três idiomas e múltiplos países: Brasil (Português), Latam (Espanhol – múltiplos países na America do Sul, Central e Espanha) e Americas (Inglês - múltiplos países na Europa, Ásia, Oceania e América do Norte).</p>
+<p><strong>Tradução literal não funciona. É preciso adaptar:</strong></p>
+<div style="border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 0.5rem; margin-top: 1rem;">
+<h4 style="color: var(--color-ibs-accent);">Tom e formalidade</h4>
+<p>Brasileiro é mais informal; espanhol e inglês variam por país</p>
+<h4 style="color: var(--color-ibs-accent); margin-top: 1rem;">Expressões idiomáticas</h4>
+<p>Evitar "false friends" e expressões específicas que não se encaixam com a nacionalidade</p>
+<h4 style="color: var(--color-ibs-accent); margin-top: 1rem;">Referências culturais</h4>
+<p>Formatos de datas, moedas, feriados, contextos locais</p>
+<h4 style="color: var(--color-ibs-accent); margin-top: 1rem;">Call to Actions</h4>
+<p>CTAs adequados a cada público</p>
+</div>`,
+                tipo: 'conteudo'
+            },
+            {
+                numero: 17,
+                capitulo: 3,
+                titulo: "Exemplo: Identificar pontos de adaptação cultural em e-mail",
+                conteudo: `<h3>Cenário: E-mail de campanha em português (Brasil) para adaptação ao público Latam (espanhol)</h3>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 1rem; text-align: left;">
+<div style="border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 0.5rem;">
+<h4 style="color: var(--color-ibs-accent);">E-mail original (PT-BR):</h4>
+<p><strong>Assunto:</strong> Última Chamada: CUOA Business School (CUOA)</p>
+<p>Prezado xxx,</p>
+<p>Recentemente você foi aprovado para estudar no exterior pela CUOA Business School (CUOA) e o resultado da sua aprovação foi encaminhado há alguns dias para o seu e-mail juntamente ao contrato (via docsign), que ainda não foi assinado.</p>
+<p>Você possui alguma dúvida? Em caso positivo, pode encaminhá-la para este mesmo e-mail. A nossa equipe está a postos e dará o suporte necessário para a realização desse sonho.</p>
+<p>O prazo para assinatura do seu contrato se encerrará em breve.</p>
+<p>Aguardamos seu retorno para darmos seguimento ao processo.</p>
+<p>Bons estudos e até breve,<br>Prof. Ricardo Britto<br>Doutor em Administração pela USP<br>Responsável pelo Processo Seletivo de Bolsas de Estudos</p>
+</div>
+<div style="border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 0.5rem;">
+<h4 style="color: var(--color-ibs-accent);">Pontos de adaptação para Latam (ES):</h4>
+<ol>
+<li><strong>Tom excessivamente formal:</strong> "Prezado" → Adaptar para tom mais próximo mas respeitoso</li>
+<li><strong>Expressões específicas do Brasil:</strong> "está a postos", "realização desse sonho" → Substituir por equivalentes neutros em espanhol, sem traduzir literalmente</li>
+<li><strong>Linguagem indireta:</strong> "se encerrará em breve" → Tornar mais específico com data clara</li>
+<li><strong>Estrutura de despedida:</strong> "Bons estudos e até breve" → Adaptar para "Saludos cordiales" ou equivalente</li>
+<li><strong>Assinatura:</strong> Inserir a assinatura aprovada para o público Latam</li>
+</ol>
+<div style="border-left: 4px solid var(--color-ibs-accent); background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 0.5rem; margin-top: 1rem;">
+<p><strong>Dica Importante:</strong> Após adaptar textos com o auxílio de IA, é recomendável que a versão final passe por validação de um colaborador nativo no idioma de destino, seja espanhol ou inglês, para garantir não apenas a correção linguística, mas também a adequação cultural da mensagem.</p>
+</div>
+</div>
+</div>`,
+                tipo: 'conteudo'
+            },
+            {
+                numero: 18,
+                capitulo: 3,
+                titulo: "Exemplo: Prompt CATE para adaptação cultural",
+                conteudo: `<div style="border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 0.5rem;">
+<p><strong style="color: var(--color-ibs-accent);">Contexto:</strong> Sou colaborador da área de Mídias da IBS Americas. Tenho e-mail de campanha em português (Brasil) que precisa ser adaptado culturalmente para público Latam (espanhol).</p>
+<p><strong style="color: var(--color-ibs-accent);">Ângulo:</strong> Tom institucional e respeitoso, adequado ao público corporativo e acadêmico da América Latina (Argentina, Chile, Colômbia, México). Evitar tradução literal e ajustar expressões.</p>
+<p><strong style="color: var(--color-ibs-accent);">Tarefa:</strong> Adaptar e-mail para espanhol (Latam) aplicando mudanças: (1) ajustar tom formal, (2) substituir expressões coloquiais, (3) evitar emoji, (4) tornar CTA específico, (5) adaptar despedida. Registrar cada ajuste com justificativa.</p>
+<p><strong style="color: var(--color-ibs-accent);">Estilo:</strong> E-mail adaptado + tabela de ajustes (Item | Original PT | Adaptado ES | Justificativa cultural). Máximo 250 palavras no e-mail.</p>
+</div>
+<div style="border-left: 4px solid var(--color-ibs-success); padding: 1rem; border-radius: 0.5rem; margin-top: 1rem; background: rgba(255,255,255,0.05);">
+<p><strong>Resultado:</strong> E-mail culturalmente adaptado para Latam + relatório de ajustes com justificativas, pronto para revisão e envio.</p>
+</div>`,
+                tipo: 'conteudo'
+            },
+            {
+                numero: 19,
+                capitulo: 4,
+                titulo: "Capítulo 4: Outros documentos & Avaliação rigorosa",
+                conteudo: `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+<div>
+<h3 style="color: var(--color-ibs-accent);">Outros documentos com CATE:</h3>
+<ul>
+<li><strong>Brief de decisão (1 página):</strong> Opções, trade-offs, riscos, recomendação</li>
+<li><strong>Roteiro de reunião:</strong> Pauta estruturada, objetivos, tempo por tópico</li>
+<li><strong>Ata de reunião:</strong> Decisões, itens de ação, responsáveis e prazos</li>
+<li><strong>Checklist operacional de QA:</strong> Campanhas, validação de links</li>
+<li><strong>Relatório semanal:</strong> Narrativa executiva com insights e alertas</li>
+</ul>
+</div>
+<div>
+<h3 style="color: var(--color-ibs-accent);">A saída da IA não é perfeita – sempre revise</h3>
+<h4 style="color: #60a5fa;">Checklist de qualidade:</h4>
+<ul>
+<li>Clareza – Mensagem principal compreensível?</li>
+<li>Tom – Adequado ao público?</li>
+<li>Coerência – Informações consistentes?</li>
+<li>CTA – Ação clara e destacada?</li>
+<li>Conformidade – Link de descadastro? Sem PII desnecessário?</li>
+</ul>
+<h4 style="color: #60a5fa; margin-top: 1rem;">Checagem factual obrigatória:</h4>
+<p style="color: #ef4444;"><strong>X</strong> NUNCA confie cegamente em: datas, valores, nomes de parceiros, links parametrizados</p>
+<p style="color: #10b981;"><strong>✓</strong> Como verificar: Consultar fontes oficiais (site IBS, Salesforce, planilhas internas)</p>
+</div>
+</div>`,
+                tipo: 'conteudo'
+            },
+            {
+                numero: 20,
+                capitulo: 4,
+                titulo: "Documentar e versionar prompts para reuso",
+                conteudo: `<h3>Prompts bem-sucedidos devem ser documentados e reutilizados</h3>
+<div style="border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 0.5rem; margin-top: 1rem;">
+<h4 style="color: var(--color-ibs-accent);">Ficha de Prompt – Template IBS Americas</h4>
+<ul>
+<li>Nome do prompt</li>
+<li>Objetivo</li>
+<li>Contexto, Ângulo, Tarefa, Estilo</li>
+<li>Entradas necessárias</li>
+<li>Saída esperada</li>
+<li>Critérios de qualidade</li>
+<li>Versão, Data, Autor</li>
+<li>Observações e melhorias</li>
+</ul>
+</div>
+<h3 style="margin-top: 2rem; color: var(--color-ibs-accent);">Benefícios da documentação:</h3>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 1rem;">
+<div>
+<h4 style="color: #60a5fa;">Reduz tempo</h4>
+<p>Menos tempo criando prompts futuros</p>
+</div>
+<div>
+<h4 style="color: #60a5fa;">Facilita compartilhamento</h4>
+<p>Outras áreas podem usar seus prompts</p>
+</div>
+<div>
+<h4 style="color: #60a5fa;">Garante consistência</h4>
+<p>Resultados previsíveis entre iterações</p>
+</div>
+<div>
+<h4 style="color: #60a5fa;">Permite melhoria contínua</h4>
+<p>Versionar e evoluir prompts ao longo do tempo</p>
+</div>
+</div>`,
+                tipo: 'conteudo'
+            },
+            {
+                numero: 21,
+                capitulo: 4,
+                titulo: "Pontos de atenção – Erros comuns",
+                conteudo: `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+<div style="border-left: 4px solid #ef4444; background: rgba(239,68,68,0.1); padding: 1rem; border-radius: 0.5rem;">
+<h4 style="color: #ef4444;">Evite</h4>
+<ul>
+<li>Prompt genérico: "Escreva um e-mail."</li>
+<li>Aceitar saída sem revisar</li>
+<li>Não verificar fatos críticos</li>
+<li>Usar dados sensíveis em ferramentas fora do ecossistema da IBS Americas (ChatGPT, Gemini, Claude)</li>
+<li>Não documentar prompts bem-sucedidos</li>
+<li>Tradução literal sem adaptação cultural</li>
+</ul>
+</div>
+<div style="border-left: 4px solid #10b981; background: rgba(16,185,129,0.1); padding: 1rem; border-radius: 0.5rem;">
+<h4 style="color: #10b981;">Faça</h4>
+<ul>
+<li>Prompt estruturado: CATE completo com contexto, ângulo, tarefa e estilo</li>
+<li>Sempre aplicar checklist de qualidade, tom, coerência e conformidade</li>
+<li>Checar datas, valores, links, nomes em fontes oficiais antes de enviar</li>
+<li>Usar exclusivamente Chat do Microsoft 365 Copilot para dados corporativos</li>
+<li>Registrar na ficha de prompt para reuso e melhoria contínua</li>
+<li>Sempre adaptar tom, expressões e referências ao público-alvo</li>
+</ul>
+</div>
+</div>`,
+                tipo: 'conteudo'
+            },
+            {
+                numero: 22,
+                capitulo: 4,
+                titulo: "Recap – O que você aprendeu",
+                conteudo: `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+<div>
+<h4 style="color: var(--color-ibs-accent);">Dominar o método CATE</h4>
+<p>Contexto, Ângulo, Tarefa, Estilo para prompts profissionais</p>
+</div>
+<div>
+<h4 style="color: var(--color-ibs-accent);">Criar documentos estratégicos</h4>
+<p>Matrizes RACI, análises de planilhas, relatórios, apresentações</p>
+</div>
+<div>
+<h4 style="color: var(--color-ibs-accent);">Adaptar culturalmente comunicações</h4>
+<p>Revisar e ajustar e-mails para Brasil, Latam e Americas</p>
+</div>
+<div>
+<h4 style="color: var(--color-ibs-accent);">Avaliar saídas com checklists</h4>
+<p>Critérios objetivos de qualidade e checagem factual rigorosa</p>
+</div>
+<div>
+<h4 style="color: var(--color-ibs-accent);">Documentar prompts para reuso</h4>
+<p>Ficha de versionamento e melhoria contínua</p>
+</div>
+<div>
+<h4 style="color: var(--color-ibs-accent);">Usar IA de forma segura</h4>
+<p>Chat do Microsoft 365 Copilot para dados sensíveis</p>
+</div>
+</div>`,
+                tipo: 'conteudo'
+            },
+            {
+                numero: 25,
+                capitulo: 5,
+                titulo: "Parabéns!",
+                subtitulo: "Você concluiu todos os capítulos do Módulo 1.",
+                conteudo: `<p style="text-align: center; font-size: 1.25rem;">Você demonstrou dedicação e absorveu os principais conceitos sobre o método CATE, criação de documentos e avaliação de conteúdo com IA.</p>
+                <div style="text-align: center; margin-top: 2rem;">
+                    <p style="font-size: 1.125rem;">Agora, prepare-se para o <strong>Quiz Final</strong>, que testará seu conhecimento sobre todo o conteúdo do módulo.</p>
+                    <div class="celebration" style="font-size: 3rem; margin-top: 1rem;">🏆</div>
+                </div>`,
+                tipo: 'conteudo'
+            }
+        ];
+
+        // Quiz data for each chapter
+        
+const quizzesData = {
+    "1": [
+        {
+            pergunta: "Qual elemento do CATE é mais crucial para evitar que a IA produza um resultado vago e inadequado ao objetivo da IBS Americas?",
+            alternativas: [
+                "Estilo, pois define se a saída será um e-mail ou uma tabela, o que guia todo o resto.",
+                "Ângulo, porque o tom da comunicação é a primeira coisa que o destinatário percebe.",
+                "Contexto, pois estabelece a identidade, o objetivo e a situação, fundamentando todas as outras instruções.",
+                "Tarefa, pois sem uma ação clara, a IA não sabe o que deve ser executado."
+            ],
+            correta: 2,
+            explicacao: "O Contexto é a base. Sem ele, a Tarefa pode ser executada de forma errada, o Ângulo pode ser inadequado e o Estilo pode não fazer sentido. Ele ancora o pedido na realidade da empresa.",
+            conceitos: ["contexto_cate"]
+        },
+        {
+            pergunta: "Ao solicitar à IA que crie um 'Relatório executivo' (Estilo) sobre a performance de uma campanha, qual detalhe na 'Tarefa' torna o pedido mais profissional e útil?",
+            alternativas: [
+                "Pedir que o relatório seja 'abrangente e detalhado' para não perder nenhuma informação.",
+                "Solicitar a identificação de 3 insights acionáveis, a correlação entre investimento e leads, e uma recomendação.",
+                "Instruir a IA a usar uma linguagem 'corporativa e assertiva' em todo o texto.",
+                "Definir que o relatório deve ser entregue em formato de bullet points para facilitar a leitura."
+            ],
+            correta: 1,
+            explicacao: "Uma Tarefa eficaz é específica sobre os resultados analíticos esperados (insights, correlações, recomendações), em vez de ser vaga ('abrangente') ou focar apenas no formato ou tom.",
+            conceitos: ["tarefa_cate"]
+        },
+        {
+            pergunta: "A diferença fundamental entre 'Ângulo' e 'Estilo' no método CATE é:",
+            alternativas: [
+                "Ângulo define a estrutura (tabela, e-mail) e Estilo define o tom (formal, informal).",
+                "Ângulo direciona o tom e a perspectiva da comunicação, enquanto Estilo determina o formato e a estrutura da saída.",
+                "Ângulo foca em aspectos culturais, enquanto Estilo foca no layout visual do documento final.",
+                "Ângulo é usado para textos criativos e Estilo para documentos formais e técnicos."
+            ],
+            correta: 1,
+            explicacao: "Ângulo é sobre 'como' a mensagem soa e se posiciona (tom, perspectiva, cultura). Estilo é sobre 'como' a resposta é organizada e formatada (tabela, e-mail, número de palavras).",
+            conceitos: ["angulo_vs_estilo"]
+        },
+        {
+            pergunta: "Por que, em muitos casos, a Tarefa 'Revisar e otimizar o e-mail abaixo' é mais eficiente do que 'Escrever um e-mail do zero' para um profissional da IBS Americas?",
+            alternativas: [
+                "Porque a IA é inerentemente ruim em criar rascunhos iniciais e sempre precisa de um texto-base.",
+                "Porque permite que o profissional aplique seu conhecimento estratégico no rascunho, usando a IA para aprimorar a clareza, tom e conformidade.",
+                "Porque criar um prompt CATE completo para escrever do zero é sempre mais demorado do que escrever o próprio e-mail.",
+                "Porque a função de revisão das IAs é comprovadamente mais avançada do que a de criação."
+            ],
+            correta: 1,
+            explicacao: "Usar a IA como uma ferramenta de otimização combina o conhecimento de negócio do profissional com a capacidade da IA de refinar a linguagem, garantindo controle, precisão e eficiência.",
+            conceitos: ["tarefa_revisao"]
+        },
+        {
+            pergunta: "Cenário IBS: Um analista de Mídias precisa gerar 3 variações de texto para um anúncio no Instagram da campanha JAN26 para a Colômbia. Qual prompt CATE é o mais eficiente?",
+            alternativas: [
+                "T: Crie 3 textos de anúncio para o Instagram sobre a campanha JAN26 na Colômbia. E: Use emojis.",
+                "C: Campanha JAN26, público colombiano. A: Tom jovem e informal. T: Escrever 3 anúncios. E: Curtos e com CTA.",
+                "C: Sou analista de Mídias da IBS, na campanha JAN26 para a Colômbia. A: Tom aspiracional focado em carreira, usando o pronome 'usted'. T: Criar 3 variações de copy. E: Formato post de Instagram, máx. 150 caracteres, com CTA claro.",
+                "C: Preciso de marketing para a Colômbia. A: Formal. T: Fazer 3 opções de texto para a campanha JAN26. E: Formato para redes sociais."
+            ],
+            correta: 2,
+            explicacao: "A terceira opção é a única que integra todos os elementos do CATE de forma precisa: o cargo e objetivo (Contexto), o tom e a adequação cultural específica ('usted') (Ângulo), a ação exata (Tarefa) e as restrições de formato da plataforma (Estilo).",
+            conceitos: ["cate_cenario"]
+        }
+    ],
+    "2": [
+        {
+            pergunta: "Ao usar CATE para criar um 'Brief de Decisão', o que a 'Tarefa' deve prioritariamente incluir para que o documento seja eficaz?",
+            alternativas: [
+                "Uma lista exaustiva de todas as atividades do projeto relacionadas à decisão.",
+                "A solicitação de uma análise de opções, com trade-offs, riscos e uma recomendação fundamentada.",
+                "A definição de que o documento deve ser visualmente atraente para a liderança.",
+                "Um resumo detalhado das conversas que levaram à necessidade da decisão."
+            ],
+            correta: 1,
+            explicacao: "A essência de um Brief de Decisão é apresentar um caminho claro. Portanto, a Tarefa deve focar em instruir a IA a analisar cenários (opções, riscos) e a convergir para uma recomendação, que é o objetivo do documento.",
+            conceitos: ["brief_decisao"]
+        },
+        {
+            pergunta: "Ao usar IA para analisar uma planilha de inadimplência da IBS Americas, qual o objetivo mais estratégico da 'Tarefa'?",
+            alternativas: [
+                "Apenas calcular a porcentagem de alunos inadimplentes e o valor total devido.",
+                "Identificar padrões ocultos, como a correlação entre cursos específicos, países e a probabilidade de atraso, para direcionar ações preventivas.",
+                "Reformatar a planilha com cores e filtros para facilitar a análise manual posterior pela equipe.",
+                "Gerar um e-mail de cobrança padrão para ser enviado a todos os alunos na lista."
+            ],
+            correta: 1,
+            explicacao: "O maior valor da IA na análise de dados é ir além do óbvio (cálculos simples) e descobrir insights (padrões, correlações) que permitem à equipe tomar decisões estratégicas e proativas.",
+            conceitos: ["analise_dados"]
+        },
+        {
+            pergunta: "Cenário IBS: Você precisa resumir um relatório de 10 páginas do Power BI para uma apresentação executiva. Qual 'Estilo' no prompt CATE seria mais eficaz?",
+            alternativas: [
+                "Estilo: Resumo conciso, com os pontos mais importantes do relatório.",
+                "Estilo: Formato de apresentação do PowerPoint, com um slide para cada seção do relatório original.",
+                "Estilo: Relatório executivo em bullet points, com 3 seções (Principais Insights, Riscos, Recomendações) e um limite de 300 palavras.",
+                "Estilo: Tabela comparativa mostrando os dados do mês atual contra o mês anterior."
+            ],
+            correta: 2,
+            explicacao: "Para um público executivo, a eficácia está na clareza e na capacidade de ação. Definir seções focadas em resultados (Insights, Riscos, Recomendações) e impor um limite de palavras (Estilo) força a IA a ser sucinta e estratégica.",
+            conceitos: ["conteudo_ppt"]
+        },
+        {
+            pergunta: "Ao pedir à IA para criar o conteúdo de uma apresentação institucional, qual instrução no 'Estilo' é mais produtiva?",
+            alternativas: [
+                "Estilo: Crie slides com um design moderno e alinhado à marca da IBS Americas.",
+                "Estilo: A apresentação deve ser convincente e impactante para os parceiros.",
+                "Estilo: Organize em 8 slides; para cada um, forneça um título (máx. 10 palavras) e 3-4 bullet points (máx. 15 palavras cada).",
+                "Estilo: O conteúdo deve ser detalhado, explicando a fundo cada programa oferecido."
+            ],
+            correta: 2,
+            explicacao: "A IA gera texto, não design. Uma instrução de Estilo eficaz foca em restrições textuais claras e estruturais (número de slides, tamanho de títulos e bullets), o que resulta em um conteúdo pronto para ser inserido no template oficial.",
+            conceitos: ["conteudo_ppt"]
+        },
+        {
+            pergunta: "Qual é o principal valor de usar a IA para gerar o rascunho de um 'Checklist Operacional de QA' para uma campanha?",
+            alternativas: [
+                "A IA pode testar automaticamente se os links parametrizados na landing page estão funcionando.",
+                "A IA pode criar uma lista de verificação abrangente com base nas melhores práticas, que o profissional pode então adaptar e refinar para o contexto específico da IBS.",
+                "A IA garante que nenhum erro passará despercebido pela equipe durante o processo de QA.",
+                "A IA pode acessar o ambiente de teste da campanha e validar os dados do formulário."
+            ],
+            correta: 1,
+            explicacao: "A IA não pode testar funcionalidades (links, formulários), mas é excelente em criar estruturas e rascunhos baseados em padrões. Ela pode sugerir itens de verificação que o profissional talvez esquecesse, otimizando o ponto de partida do checklist.",
+            conceitos: ["raci_cenario"]
+        }
+    ],
+    "3": [
+        {
+            pergunta: "Qual é o maior risco de usar a expressão brasileira 'dar um jeitinho' numa comunicação profissional para um parceiro nos EUA?",
+            alternativas: [
+                "A expressão não tem tradução direta e pode ser interpretada como falta de profissionalismo, planejamento ou até mesmo como uma tentativa de contornar regras.",
+                "É uma expressão universalmente compreendida no mundo dos negócios como 'encontrar uma solução criativa'.",
+                "Será entendida, mas é considerada muito informal e só deve ser usada entre colegas da mesma equipe.",
+                "A tradução literal 'give a little way' transmite a mesma ideia de flexibilidade e é de uso comum."
+            ],
+            correta: 0,
+            explicacao: "Expressões culturais como essa carregam muitas nuances que não sobrevivem à tradução. Para um público que valoriza processos claros (como o americano), pode soar negativamente, sugerindo improviso ou falta de transparência.",
+            conceitos: ["expressoes_idiomaticas"]
+        },
+        {
+            pergunta: "Ao adaptar um e-mail do português (Brasil) para o espanhol (Latam), por que a 'Tarefa' de 'Adaptar culturalmente' é mais precisa do que 'Traduzir'?",
+            alternativas: [
+                "Porque 'traduzir' implica apenas a troca de palavras, enquanto 'adaptar' inclui ajustar o tom, a formalidade e as referências para ser relevante ao público local.",
+                "Porque as ferramentas de IA são melhores em adaptar do que em traduzir textos longos.",
+                "Porque a tradução pode introduzir erros gramaticais, enquanto a adaptação foca apenas no vocabulário.",
+                "Porque 'adaptar' é um termo mais moderno para o mesmo processo de tradução."
+            ],
+            correta: 0,
+            explicacao: "A tradução literal ignora as nuances culturais, de tom e de formalidade que são cruciais para uma comunicação eficaz. A adaptação cultural é um processo mais profundo que garante que a mensagem seja não apenas entendida, mas também bem recebida.",
+            conceitos: ["adaptacao_eua"]
+        },
+        {
+            pergunta: "Por que a validação de uma adaptação cultural feita por IA com um falante nativo é uma etapa crítica?",
+            alternativas: [
+                "Para confirmar que a IA não usou sinônimos ou vocabulário muito complexo.",
+                "Porque a IA pode cometer erros de concordância verbal que apenas um nativo perceberia.",
+                "Porque um nativo pode validar sutilezas de tom, conotações e referências culturais que a IA pode interpretar de forma literal ou inadequada.",
+                "Este passo é opcional se for usada uma ferramenta de IA de última geração, pois elas já são treinadas com dados culturais."
+            ],
+            correta: 2,
+            explicacao: "A IA é uma ferramenta poderosa, mas não possui vivência cultural. A validação humana por um nativo é insubstituível para garantir que a mensagem não soe 'estranha', artificial ou, no pior caso, ofensiva.",
+            conceitos: ["validacao_humana"]
+        },
+        {
+            pergunta: "Qual dos seguintes itens é um exemplo de 'referência cultural' que mais exige atenção ao adaptar uma comunicação do Brasil para a Europa?",
+            alternativas: [
+                "O logotipo da IBS Americas, que é internacional.",
+                "A menção a um feriado como o 'Carnaval' para justificar um prazo.",
+                "A estrutura de um e-mail com saudação, corpo e despedida.",
+                "O uso de 'atenciosamente' como encerramento formal."
+            ],
+            correta: 1,
+            explicacao: "Feriados são altamente específicos de cada cultura. Mencionar o Carnaval para um público europeu, que não o celebra da mesma forma (ou não celebra), pode causar confusão e parecer pouco profissional. Formatos de data e moeda são outros exemplos críticos.",
+            conceitos: ["referencias_culturais"]
+        },
+        {
+            pergunta: "Cenário IBS: Você precisa adaptar um e-mail sobre prazo final de inscrição, do Brasil para a Argentina. O original usa um tom próximo e a expressão 'não perca tempo'. Qual seria a melhor estratégia de adaptação no prompt CATE?",
+            alternativas: [
+                "A: Manter o tom informal, pois a proximidade cultural facilita a compreensão.",
+                "T: Traduzir literalmente a expressão para 'no pierdas tiempo'.",
+                "A: Ajustar o tom para 'institucional, mas encorajador' e usar o pronome 'usted'. T: Substituir a expressão por uma frase como 'le recomendamos completar su postulación para asegurar su vacante'.",
+                "T: Remover qualquer menção à urgência para não pressionar os candidatos argentinos, que podem ter um ritmo diferente."
+            ],
+            correta: 2,
+            explicacao: "A melhor estratégia é ajustar o Ângulo (tom, formalidade com 'usted') e a Tarefa (substituir a expressão idiomática por uma frase clara e profissional), mantendo o senso de urgência de forma adequada à cultura local.",
+            conceitos: ["adaptacao_cenario"]
+        }
+    ],
+    "4": [
+        {
+            pergunta: "Qual é a finalidade principal da 'Checagem Factual Obrigatória' após receber uma resposta da IA?",
+            alternativas: [
+                "Verificar se o texto gerado pela IA é original e não contém plágio de outras fontes.",
+                "Validar se a IA seguiu as instruções de contagem de palavras e formatação especificadas no 'Estilo'.",
+                "Confirmar manualmente que dados críticos (datas, valores, nomes, links) estão corretos, usando fontes oficiais da IBS como referência.",
+                "Garantir que a IA usou um tom de voz consistente com o que foi solicitado no 'Ângulo'."
+            ],
+            correta: 2,
+            explicacao: "A IA pode 'alucinar' (inventar dados) ou usar informações desatualizadas. A checagem factual é uma etapa manual e intransferível de responsabilidade do profissional para garantir a precisão e a credibilidade de qualquer informação crítica.",
+            conceitos: ["checagem_factual"]
+        },
+        {
+            pergunta: "O que o critério 'Conformidade' em um checklist de qualidade de e-mails da IBS Americas visa garantir?",
+            alternativas: [
+                "Que o e-mail está em conformidade com as preferências de estilo do gestor da área.",
+                "Que o design do e-mail está em conformidade com as últimas tendências de marketing digital.",
+                "Que o e-mail cumpre requisitos legais e de boas práticas, como a inclusão de um link de descadastro (opt-out) e a não exposição de PII.",
+                "Que a linguagem do e-mail está em conformidade com o vocabulário usado em comunicações anteriores."
+            ],
+            correta: 2,
+            explicacao: "Conformidade (ou compliance) refere-se ao cumprimento de regras, leis (como LGPD/GDPR) e políticas internas. Um link de opt-out e o manejo correto de dados pessoais (PII) são exemplos cruciais.",
+            conceitos: ["checklist_conformidade"]
+        },
+        {
+            pergunta: "Qual o principal benefício de documentar um prompt bem-sucedido em uma 'Ficha de Prompt' para a equipe?",
+            alternativas: [
+                "Garantir que o prompt não seja alterado por outros colaboradores, mantendo sua qualidade original.",
+                "Aumentar o tempo de execução de tarefas, pois exige o preenchimento de um documento adicional.",
+                "Transformar um insight individual em um ativo reutilizável para a equipe, promovendo consistência, agilidade e melhoria contínua.",
+                "Servir como prova de que a tarefa foi executada, para fins de auditoria interna."
+            ],
+            correta: 2,
+            explicacao: "Documentar prompts escala o conhecimento. Permite que um bom processo seja replicado, economizando tempo para todos, garantindo um padrão de qualidade e criando uma base de conhecimento para a equipe.",
+            conceitos: ["documentacao_prompts"]
+        },
+        {
+            pergunta: "Por que é um erro crítico aceitar a primeira resposta da IA sem uma revisão aprofundada?",
+            alternativas: [
+                "Porque as IAs são programadas para dar uma resposta 'média' na primeira tentativa, melhorando apenas com iterações.",
+                "Porque a IA pode ter interpretado uma ambiguidade no prompt de forma incorreta, omitido um requisito ou 'alucinado' um fato.",
+                "Porque a primeira resposta consome menos recursos do sistema, sendo de qualidade inferior às subsequentes.",
+                "Não é um erro se o prompt CATE foi perfeitamente estruturado, pois isso garante 100% de precisão."
+            ],
+            correta: 1,
+            explicacao: "A IA é uma ferramenta de assistência, não um oráculo. A revisão crítica por parte do profissional é essencial para validar a adequação, precisão e qualidade do conteúdo, assumindo a responsabilidade final pelo resultado.",
+            conceitos: ["revisao_critica"]
+        },
+        {
+            pergunta: "Cenário IBS: Você usou a IA para gerar um checklist de QA para uma nova landing page. Qual item você NUNCA deve confiar que a IA verificou e precisa ser testado manualmente?",
+            alternativas: [
+                "A consistência do tom da mensagem com a campanha.",
+                "A correção ortográfica e gramatical do conteúdo.",
+                "A funcionalidade dos links parametrizados e o envio correto dos dados do formulário de inscrição.",
+                "A clareza da estrutura do texto, incluindo títulos e CTAs."
+            ],
+            correta: 2,
+            explicacao: "A IA pode analisar a estrutura de um link ou a sintaxe de um código, mas não pode executar ações no mundo real como clicar em um link, preencher um formulário e verificar se os dados chegaram ao destino (CRM, planilha). Isso exige teste funcional manual.",
+            conceitos: ["qa_manual"]
+        }
+    ],
+"final": [
+  {
+    pergunta: "A sequência lógica mais eficaz para estruturar um prompt com o método CATE é:",
+    alternativas: [
+      "Contexto → Ângulo → Tarefa → Estilo",
+      "Tarefa → Estilo → Contexto → Ângulo",
+      "Ângulo → Tarefa → Estilo → Contexto",
+      "Estilo → Contexto → Ângulo → Tarefa"
+    ],
+    correta: 0,
+    explicacao: "A sequência C → A → T → E é a mais lógica, pois estabelece a base (Contexto), define a voz (Ângulo), especifica a ação (Tarefa) e formata a saída (Estilo).",
+    conceitos: ["sequencia_cate"]
+  },
+  {
+    pergunta: "No método CATE, o que o 'Contexto' prioritariamente define?",
+    alternativas: [
+      "O formato final do documento, como tabela ou lista.",
+      "O tom da comunicação, se será formal ou informal.",
+      "Quem você é, para quem se destina a comunicação e qual o objetivo de negócio.",
+      "A ação específica que a IA deve executar, como 'resumir' ou 'criar'."
+    ],
+    correta: 2,
+    explicacao: "O Contexto ancora o pedido na realidade, respondendo às perguntas: Quem? Para quem? Por quê? Onde? Isso é fundamental para a relevância da resposta.",
+    conceitos: ["contexto_cate"]
+  },
+  {
+    pergunta: "No 'Ângulo', o foco principal é ajustar:",
+    alternativas: [
+      "Apenas a gramática e a ortografia do texto.",
+      "O tom, a perspectiva e as nuances culturais da comunicação.",
+      "A quantidade de palavras e o número de parágrafos da resposta.",
+      "Os dados e métricas que devem ser incluídos no documento."
+    ],
+    correta: 1,
+    explicacao: "Ângulo é sobre a 'voz' da comunicação: o tom (formal, acolhedor), a perspectiva (de um gerente, de um colega) e a sensibilidade cultural.",
+    conceitos: ["angulo_cate"]
+  },
+  {
+    pergunta: "Para que a 'Tarefa' seja bem executada pela IA, a instrução deve ser:",
+    alternativas: [
+      "Ampla e aberta, para dar liberdade criativa à IA.",
+      "Focada apenas no resultado final, sem detalhar os passos.",
+      "Específica, mensurável e com critérios claros do que deve ser feito.",
+      "Breve e informal, usando linguagem coloquial para facilitar o entendimento da IA."
+    ],
+    correta: 2,
+    explicacao: "Uma Tarefa eficaz é direta e inequívoca. 'Analisar dados para encontrar 3 insights' é melhor do que 'Ver os dados e me dizer o que é importante'.",
+    conceitos: ["tarefa_cate"]
+  },
+  {
+    pergunta: "Ao adaptar uma comunicação do Brasil para um parceiro em LATAM, a abordagem mais correta é:",
+    alternativas: [
+      "Usar um tradutor automático e enviar o resultado diretamente.",
+      "Escrever em 'portunhol' para criar uma comunicação mais próxima e informal.",
+      "Realizar uma adaptação cultural, ajustando a formalidade, expressões idiomáticas e referências locais.",
+      "Manter o texto original em português, pois é amplamente compreendido nos negócios em LATAM."
+    ],
+    correta: 2,
+    explicacao: "A eficácia da comunicação multicultural depende da adaptação, não apenas da tradução. Isso demonstra respeito e garante que a mensagem seja recebida como planejado.",
+    conceitos: ["adaptacao_cultural"]
+  },
+  {
+    pergunta: "Em um checklist de qualidade para avaliar a saída da IA, qual item é crítico e de responsabilidade humana intransferível?",
+    alternativas: [
+      "A contagem de palavras para verificar se a IA seguiu o 'Estilo'.",
+      "A verificação da originalidade do texto para evitar plágio.",
+      "A checagem factual de dados (nomes, datas, links) contra fontes oficiais da IBS.",
+      "A avaliação da criatividade e do grau de inovação da resposta gerada."
+    ],
+    correta: 2,
+    explicacao: "A IA pode 'alucinar' ou usar dados desatualizados. A responsabilidade final pela precisão de informações críticas é sempre do profissional que está usando a ferramenta.",
+    conceitos: ["checklist_qualidade"]
+  },
+  {
+    pergunta: "Qual a ferramenta de IA indicada para lidar com dados sensíveis e informações corporativas da IBS Americas, conforme o módulo?",
+    alternativas: [
+      "ChatGPT (versão pública gratuita).",
+      "Google Gemini (antigo Bard).",
+      "Chat do Microsoft 365 Copilot, acessado com o login institucional.",
+      "Qualquer ferramenta de IA, desde que a conversa seja apagada após o uso."
+    ],
+    correta: 2,
+    explicacao: "O módulo enfatiza que, para dados corporativos e sensíveis, deve-se usar exclusivamente o Chat do Microsoft 365 Copilot, pois ele opera dentro do ambiente seguro da instituição.",
+    conceitos: ["matriz_raci"]
+  }
+]
+};
+
+// Store shuffled options per question to keep consistency when navigating
+const shuffledMap = new Map();
+
+function shuffleArray(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
+
+
+        // App State
+        let currentSlide = 1;
+        let currentQuizQuestion = 0;
+        let currentQuiz = null;
+        let completedSlides = new Set([1]); // Start with slide 1 completed
+        let completedChapters = new Set();
+        let quizAttempts = new Map();
+        let quizAnswers = new Map();
+        let chapterResults = new Map();
+        let recoveryMode = false;
+        let highlightedConcepts = new Set();
+        let sidebarOpen = false;
+let menuLocked = false;
+function lockMenu(){ menuLocked = true; document.body.classList.add('menu-locked'); }
+function unlockMenu(){ menuLocked = false; document.body.classList.remove('menu-locked'); }
+
+
+        // Initialize App
+        function initializeApp() {
+            try {
+                console.log('Starting app initialization');
+                console.log('Current slide:', currentSlide);
+                console.log('Slides data length:', slidesData.length);
+                
+                generateSlides();
+                generateNavigation();
+                initializeSidebar();
+                bindEvents();
+                updateSlideDisplay();
+                updateProgress();
+                updateSidebarAccess();
+                
+                console.log('App initialized successfully');
+                
+                // Ensure first slide is visible immediately
+                setTimeout(() => {
+                    const firstSlide = document.getElementById('slide-1');
+                    if (firstSlide) {
+                        // Remove active from all slides first
+                        document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+                        // Add active to first slide
+                        firstSlide.classList.add('active');
+                        console.log('First slide forced active and visible');
+                        
+                        // Verify it's actually visible
+                        const isVisible = firstSlide.classList.contains('active');
+                        console.log('Slide 1 visibility confirmed:', isVisible);
+                        
+                        if (!isVisible) {
+                            console.error('CRITICAL: Slide 1 is not showing as active!');
+                        }
+                    } else {
+                        console.error('CRITICAL: slide-1 element not found in DOM!');
+                        // Try to recreate slides if missing
+                        generateSlides();
+                        const newFirstSlide = document.getElementById('slide-1');
+                        if (newFirstSlide) {
+                            newFirstSlide.classList.add('active');
+                        }
+                    }
+                }, 100);
+                
+            } catch (error) {
+                console.error('Error initializing app:', error);
+                console.error('Error stack:', error.stack);
+            }
+        }
+
+        // Generate slides HTML
+        function generateSlides() {
+            console.log('Generating slides');
+            const container = document.querySelector('.slide-container');
+            const navigation = container.querySelector('.navigation');
+            
+            if (!container || !navigation) {
+                console.error('Container or navigation not found');
+                return;
+            }
+            
+            console.log('Processing', slidesData.length, 'slides');
+            
+            // Add all content slides
+            slidesData.forEach((slideData, index) => {
+                const slideElement = document.createElement('div');
+                slideElement.className = 'slide';
+                slideElement.id = `slide-${slideData.numero}`;
+                
+                if (slideData.numero === 1) {
+                    slideElement.classList.add('active');
+                    console.log('Slide 1 marked as active');
+                }
+                
+                slideElement.innerHTML = generateSlideHTML(slideData);
+                container.insertBefore(slideElement, navigation);
+                console.log('Added slide:', slideData.numero, slideData.titulo);
+            });
+            
+            // Add quiz slides for each chapter
+            capitulos.forEach(cap => {
+                if (quizzesData[cap.numero]) {
+                    const quizSlideIndex = getLastSlideOfChapter(cap.numero) + 1;
+                    const quizSlide = createQuizSlide(cap.numero, quizSlideIndex);
+                    container.insertBefore(quizSlide, navigation);
+                    console.log('Added quiz slide for chapter:', cap.numero);
+                }
+            });
+            
+            // Add final quiz
+            const finalQuizSlide = createQuizSlide('final', 25);
+            container.insertBefore(finalQuizSlide, navigation);
+            console.log('Added final quiz slide');
+            
+            // Add conclusion slide
+            const conclusionSlide = document.createElement('div');
+            conclusionSlide.className = 'slide';
+            conclusionSlide.id = 'slide-conclusion';
+            conclusionSlide.innerHTML = generateConclusionHTML();
+            container.insertBefore(conclusionSlide, navigation);
+            console.log('Added conclusion slide');
+            
+            // Verify slides were created
+            const allSlides = container.querySelectorAll('.slide');
+            console.log('Total slides created:', allSlides.length);
+            console.log('Slide IDs:', Array.from(allSlides).map(s => s.id));
+            
+            // Ensure slide-1 exists and has content
+            const slide1 = document.getElementById('slide-1');
+            if (slide1) {
+                console.log('Slide 1 found:', slide1);
+                console.log('Slide 1 content:', slide1.innerHTML.length > 0 ? 'Present' : 'Missing');
+                
+                // Force slide 1 to be visible initially
+                slide1.classList.add('active');
+            } else {
+                console.error('CRITICAL ERROR: Slide 1 was not created!');
+            }
+        }
+
+        function generateSlideHTML(slideData) {
+            if (slideData.tipo === 'intro') {
+                return `
+                    <div class="slide-header">
+                        <h1 class="slide-title">${slideData.titulo}</h1>
+                        <h2 class="slide-subtitle">${slideData.subtitulo}</h2>
+                    </div>
+                    <div class="slide-content" style="text-align: center; padding: 2rem; background: rgba(255, 255, 255, 0.05); border-radius: 1rem; margin: 2rem 0;">
+                        <p style="font-size: 1.25rem; margin-bottom: 2rem; line-height: 1.6; color: #dbeafe;">${slideData.conteudo}</p>
+                        <div style="background: rgba(96, 165, 250, 0.1); padding: 1.5rem; border-radius: 0.5rem; border-left: 4px solid #60a5fa; margin-top: 2rem;">
+                            <p style="color: #60a5fa; font-weight: 600; margin-bottom: 1rem;">🎯 O que você vai aprender neste módulo:</p>
+                            <ul style="text-align: left; color: #dbeafe; list-style: none; padding: 0;">
+                                <li style="padding: 0.5rem 0; display: flex; align-items: center;"><span style="color: #60a5fa; margin-right: 1rem;">✓</span> Método CATE para prompts profissionais</li>
+                                <li style="padding: 0.5rem 0; display: flex; align-items: center;"><span style="color: #60a5fa; margin-right: 1rem;">✓</span> Criação de documentos estratégicos</li>
+                                <li style="padding: 0.5rem 0; display: flex; align-items: center;"><span style="color: #60a5fa; margin-right: 1rem;">✓</span> Adaptação cultural de comunicações</li>
+                                <li style="padding: 0.5rem 0; display: flex; align-items: center;"><span style="color: #60a5fa; margin-right: 1rem;">✓</span> Avaliação e documentação de prompts</li>
+                            </ul>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            return `
+                <div class="slide-header">
+                    <h1 class="slide-title">${slideData.titulo}</h1>
+                    ${slideData.subtitulo ? `<h2 class="slide-subtitle">${slideData.subtitulo}</h2>` : ''}
+                </div>
+                <div class="slide-content ${recoveryMode && highlightedConcepts.size > 0 ? 'recovery-mode' : ''}">
+                    ${slideData.conteudo}
+                </div>
+            `;
+        }
+
+        function createQuizSlide(chapterNumber, slideIndex) {
+            const slide = document.createElement('div');
+            slide.className = 'slide';
+            slide.id = `slide-quiz-${chapterNumber}`;
+            
+            const isChapterQuiz = chapterNumber !== 'final';
+            const quizTitle = isChapterQuiz ? `Quiz - Capítulo ${chapterNumber}` : 'Quiz Final - Todo M1';
+            const questions = isChapterQuiz ? quizzesData[chapterNumber.toString()] : quizzesData['final'];
+            const totalQuestions = questions.length;
+            
+            slide.innerHTML = `
+                <div class="slide-header">
+                    <h1 class="slide-title">${quizTitle}</h1>
+                </div>
+                <div class="quiz-container">
+                    <div class="quiz-header">
+                        <div class="quiz-progress">Questão <span id="current-question">${currentQuizQuestion + 1}</span> de ${totalQuestions}</div>
+                        <div class="quiz-attempts" id="quiz-attempts">
+                            <span style="margin-right: 0.5rem;">Tentativas:</span>
+                            <div class="attempt-indicator"></div>
+                            <div class="attempt-indicator"></div>
+                        </div>
+                    </div>
+                    <div id="quiz-question-container">
+                        <!-- Quiz content will be loaded dynamically -->
+                    </div>
+                    <div class="navigation" style="margin-top: 2rem;">
+                        <button class="btn btn-secondary" id="quiz-prev-btn" onclick="previousQuizQuestion(); return false;" disabled>
+                            ← Questão Anterior
+                        </button>
+                        <div></div>
+                        <button class="btn btn-primary" id="quiz-next-btn" onclick="nextQuizQuestion(); return false;" disabled>
+                            Próxima Questão →
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            return slide;
+        }
+
+        function generateConclusionHTML() {
+            return `
+                <div class="conclusion-slide">
+                    <div class="celebration">🎉</div>
+                    <h2 style="color: #60a5fa; margin-bottom: 2rem;">Parabéns! Você concluiu o Módulo 1!</h2>
+                    
+                    <div class="next-steps">
+                        <h3>🎯 O que você aprendeu:</h3>
+                        <ul style="list-style: none; padding: 0; margin: 1.5rem 0;">
+                            <li style="padding: 0.5rem 0; display: flex; align-items: center;"><span style="margin-right: 1rem;">✓</span> Método CATE para prompts profissionais</li>
+                            <li style="padding: 0.5rem 0; display: flex; align-items: center;"><span style="margin-right: 1rem;">✓</span> Criação de documentos estratégicos com IA</li>
+                            <li style="padding: 0.5rem 0; display: flex; align-items: center;"><span style="margin-right: 1rem;">✓</span> Adaptação cultural de comunicações</li>
+                            <li style="padding: 0.5rem 0; display: flex; align-items: center;"><span style="margin-right: 1rem;">✓</span> Avaliação e documentação de prompts</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="background: rgba(16, 185, 129, 0.1); padding: 2rem; border-radius: 1rem; margin: 2rem 0; border-left: 4px solid #10b981;">
+                        <h4 style="color: #10b981; margin-bottom: 1rem;">🚀 Próximos passos:</h4>
+                        <p>Continue sua jornada no Módulo 1 para aprofundar ainda mais suas habilidades com IA aplicada ao trabalho na IBS Americas. Acesse o botão abaixo para iniciar as atividades avaliativas do módulo 1.</p>
+                    </div>
+                    
+                    <a href="https://canvas.instructure.com/courses/12905190/quizzes/23664576" target="_blank" class="btn btn-primary" style="font-size: 1.125rem; padding: 1rem 2rem; text-decoration: none; display: inline-block;">
+                        📋 Iniciar Avaliação no Canvas
+                    </a>
+                    
+                    <br><br>
+                    <button class="btn btn-secondary" onclick="restartModule(); return false;" style="font-size: 1rem; padding: 0.75rem 1.5rem;">
+                        🔄 Reiniciar Módulo
+                    </button>
+                </div>
+            `;
+        }
+
+        function getLastSlideOfChapter(chapterNumber){ const chapter = capitulos.find(c => c.numero === chapterNumber); return Math.max(...chapter.slides); }
+
+        // Update sidebar access based on completion
+        function updateSidebarAccess() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                const slideMatch = link.onclick?.toString().match(/goToSlide\((\d+)\)/);
+                const quizMatch = link.onclick?.toString().match(/startQuiz\((\d+|'final')\)/);
+                
+                if (slideMatch) {
+                    const slideNum = parseInt(slideMatch[1]);
+                    if (!canAccessSlide(slideNum)) {
+                        link.classList.add('locked');
+                        link.style.pointerEvents = 'none';
+                        link.style.opacity = '0.5';
+                        const lockIcon = link.querySelector('.lock-icon') || document.createElement('span');
+                        lockIcon.className = 'lock-icon';
+                        lockIcon.textContent = '🔒';
+                        if (!link.querySelector('.lock-icon')) {
+                            link.appendChild(lockIcon);
+                        }
+                    } else {
+                        link.classList.remove('locked');
+                        link.style.pointerEvents = 'auto';
+                        link.style.opacity = '1';
+                        const lockIcon = link.querySelector('.lock-icon');
+                        if (lockIcon) lockIcon.remove();
+                    }
+                } else if (quizMatch) {
+                    const chapterNum = quizMatch[1].replace(/'/g, '');
+                    if (!canAccessQuiz(chapterNum)) {
+                        link.classList.add('locked');
+                        const lockIcon = link.querySelector('.lock-icon') || document.createElement('span');
+                        lockIcon.className = 'lock-icon';
+                        lockIcon.textContent = '🔒';
+                        if (!link.querySelector('.lock-icon')) {
+                            link.appendChild(lockIcon);
+                        }
+                    } else {
+                        link.classList.remove('locked');
+                        const lockIcon = link.querySelector('.lock-icon');
+                        if (lockIcon) lockIcon.remove();
+                    }
+                }
+            });
+        }
+        
+        // Generate sidebar navigation
+        function generateNavigation() {
+            console.log('Generating navigation');
+            const nav = document.getElementById('sidebarNav');
+            
+            if (!nav) {
+                console.error('Navigation container not found');
+                return;
+            }
+            
+            // Clear existing navigation
+            nav.innerHTML = '';
+            
+            // Content slides organized by chapters
+            capitulos.forEach(capitulo => {
+                const chapterSection = document.createElement('div');
+                chapterSection.className = 'chapter-section';
+                
+                const chapterHeader = document.createElement('div');
+                chapterHeader.className = 'chapter-header';
+                chapterHeader.textContent = `Capítulo ${capitulo.numero}: ${capitulo.nome}`;
+                chapterSection.appendChild(chapterHeader);
+                
+                const chapterList = document.createElement('ul');
+                chapterList.style.listStyle = 'none';
+                chapterList.style.paddingLeft = '0';
+                
+                capitulo.slides.forEach((slideNum, index) => {
+                    const slideData = slidesData.find(s => s.numero === slideNum);
+                    if (slideData) {
+                        const li = document.createElement('li');
+                        li.className = 'nav-item';
+                        const isActive = slideNum === 1 ? 'active' : ''; // Mark slide 1 as active initially
+                        
+                        const navLink = document.createElement('a');
+                        navLink.href = '#';
+                        navLink.className = 'nav-link ' + isActive;
+                        navLink.setAttribute('data-target', 'slide-'+slideNum);
+                        navLink.innerHTML = '<span class="nav-number">' + slideNum + '</span><span class="nav-title">' + slideData.titulo + '</span>';
+                        navLink.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            console.log('Nav link clicked for slide:', slideNum);
+                            goToSlide(slideNum);
+                            return false;
+                        });
+                        
+                        li.appendChild(navLink);
+                        chapterList.appendChild(li);
+                    }
+                });
+                
+                // Add quiz link
+                const chapterKey = capitulo.numero.toString();
+                if (quizzesData[chapterKey]) {
+                    const li = document.createElement('li');
+                    li.className = 'nav-item';
+                    
+                    const quizLink = document.createElement('a');
+                    quizLink.href = '#';
+                    quizLink.className = 'nav-link';
+                    quizLink.setAttribute('data-target', 'quiz-'+capitulo.numero);
+                    quizLink.innerHTML = '<span class="nav-number">Q' + capitulo.numero + '</span><span class="nav-title">Quiz Capítulo ' + capitulo.numero + '</span>';
+                    quizLink.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        console.log('Quiz link clicked for chapter:', capitulo.numero);
+                        startQuiz(capitulo.numero);
+                        return false;
+                    });
+                    
+                    li.appendChild(quizLink);
+                    chapterList.appendChild(li);
+                }
+                
+                chapterSection.appendChild(chapterList);
+                nav.appendChild(chapterSection);
+            });
+
+            // Final quiz and conclusion
+            const finalSection = document.createElement('div');
+            finalSection.className = 'chapter-section';
+            
+            const finalHeader = document.createElement('div');
+            finalHeader.className = 'chapter-header';
+            finalHeader.textContent = 'Finalização';
+            finalSection.appendChild(finalHeader);
+            
+            const finalList = document.createElement('ul');
+            finalList.style.listStyle = 'none';
+            finalList.style.paddingLeft = '0';
+            
+            const finalQuizItem = document.createElement('li');
+            finalQuizItem.className = 'nav-item';
+            
+            const finalQuizLink = document.createElement('a');
+            finalQuizLink.href = '#';
+            finalQuizLink.className = 'nav-link';
+            finalQuizLink.setAttribute('data-target', 'quiz-final');
+            finalQuizLink.innerHTML = '<span class="nav-number">QF</span><span class="nav-title">Quiz Final</span>';
+            finalQuizLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('Final quiz link clicked');
+                startQuiz('final');
+                return false;
+            });
+            
+            finalQuizItem.appendChild(finalQuizLink);
+            finalList.appendChild(finalQuizItem);
+            
+            const conclusionItem = document.createElement('li');
+            conclusionItem.className = 'nav-item';
+            
+            const conclusionLink = document.createElement('a');
+            conclusionLink.href = '#';
+            conclusionLink.className = 'nav-link';
+            conclusionLink.innerHTML = '<span class="nav-number">✓</span><span class="nav-title">Conclusão</span>';
+            conclusionLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('Conclusion link clicked');
+                goToConclusion();
+                return false;
+            });
+            
+            conclusionItem.appendChild(conclusionLink);
+            finalList.appendChild(conclusionItem);
+            
+            finalSection.appendChild(finalList);
+            nav.appendChild(finalSection);
+            
+            console.log('Navigation generated successfully');
+            updateActiveNav();
+        }
+
+// Update active state in sidebar (slides and quizzes)
+function updateActiveNav() {
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(l => l.classList.remove('active', 'quiz-active'));
+    // If we're in a quiz
+    if (currentQuiz) {
+        const chap = currentQuiz === 'final' ? 'QF' : 'Q' + currentQuiz;
+        navLinks.forEach(l => {
+            const text = l.textContent || '';
+            if (text.includes('Quiz') && text.includes(currentQuiz === 'final' ? 'Final' : String(currentQuiz))) {
+                l.classList.add('quiz-active');
+            }
+        });
+    } else {
+        // Mark current slide
+        navLinks.forEach(l => {
+            const m = l.textContent;
+            // slide number is in .nav-number
+        });
+        // A more reliable approach: add data-target on creation and compare
+        const active = document.querySelector('.nav-link[data-target="slide-'+currentSlide+'"]');
+        if (active) active.classList.add('active');
+    }
+}
+
+
+        // Quiz Functions
+        function startQuiz(chapterNumber) {
+            // Check if can access this quiz
+            if (!canAccessQuiz(chapterNumber)) {
+                if (chapterNumber === 'final') {
+                    alert('🔒 Para acessar o Quiz Final, você precisa completar todos os capítulos primeiro.');
+                } else {
+                    alert(`🔒 Para acessar o Quiz do Capítulo ${chapterNumber}, você precisa ver todos os slides do capítulo primeiro.`);
+                }
+                return;
+            }
+            
+            currentQuiz = chapterNumber;
+            currentQuizQuestion = 0;
+            
+            const quizSlideId = `slide-quiz-${chapterNumber}`;
+            const quizSlide = document.getElementById(quizSlideId);
+            
+            if (quizSlide) {
+                hideAllSlides();
+                quizSlide.classList.add('active');
+                loadQuizQuestion();
+                closeSidebar();
+                updateActiveNav();
+            }
+        }
+
+        function loadQuizQuestion() {
+            const questions = currentQuiz === 'final' ? quizzesData['final'] : quizzesData[currentQuiz.toString()];
+            const question = questions[currentQuizQuestion];
+            const questionKey = `${currentQuiz}-${currentQuizQuestion}`;
+            let view = shuffledMap.get(questionKey);
+            if (!view) {
+                const indices = questions[currentQuizQuestion].alternativas.map((_,i)=>i);
+                const shuffled = shuffleArray(indices);
+                const newAlts = shuffled.map(i => questions[currentQuizQuestion].alternativas[i]);
+                const newCorrect = shuffled.indexOf(questions[currentQuizQuestion].correta);
+                view = { alternativas: newAlts, correta: newCorrect };
+                shuffledMap.set(questionKey, view);
+            }
+            
+            // Update question counter
+            const quizRootCQ = document.getElementById(`slide-quiz-${currentQuiz}`);
+            const currentQuestionSpan = quizRootCQ ? quizRootCQ.querySelector('#current-question') : null;
+            if (currentQuestionSpan) {
+                currentQuestionSpan.textContent = currentQuizQuestion + 1;
+            }
+            
+            // Load attempts for this question
+            if (!quizAttempts.has(questionKey)) {
+                quizAttempts.set(questionKey, 0);
+            }
+            
+            // Update attempts indicator
+            updateAttemptsIndicator(questionKey);
+            
+            // Generate question HTML
+            const quizRoot = document.getElementById(`slide-quiz-${currentQuiz}`);
+            const questionContainer = quizRoot ? quizRoot.querySelector('#quiz-question-container') : null;
+            if (!questionContainer) { console.error('quiz-question-container não encontrado para', currentQuiz); return; }
+            questionContainer.innerHTML = `
+                <div class="quiz-question">${question.pergunta}</div>
+                <ul class="quiz-options" id="quiz-options">
+                    ${view.alternativas.map((alt, index) => `
+                        <li class="quiz-option" id="option-${index}">
+                            <label>
+                                <input type="radio" name="quiz-answer" value="${index}" onchange="handleQuizAnswer(${index})">
+                                ${alt}
+                            </label>
+                        </li>
+                    `).join('')}
+                </ul>
+                <div class="quiz-feedback" id="quiz-feedback"></div>
+            `;
+            
+            
+            // Reset nav buttons visibility on (re)load
+            const navRoot = document.getElementById(`slide-quiz-${currentQuiz}`);
+            if (navRoot) {
+                const nextBtnInit = navRoot.querySelector('#quiz-next-btn');
+                const prevBtnInit = navRoot.querySelector('#quiz-prev-btn');
+                if (nextBtnInit) { nextBtnInit.style.display = 'inline-flex'; nextBtnInit.disabled = true; }
+                if (prevBtnInit) { prevBtnInit.style.display = 'inline-flex'; }
+            }
+// Update navigation buttons
+            updateQuizNavigation();
+        }
+
+        
+function handleQuizAnswer(selectedOption) {
+    const questions = currentQuiz === 'final' ? quizzesData['final'] : quizzesData[currentQuiz.toString()];
+    const question = questions[currentQuizQuestion];
+    const questionKey = `${currentQuiz}-${currentQuizQuestion}`;
+    const attempts = quizAttempts.get(questionKey) || 0;
+    const view = shuffledMap.get(questionKey);
+    const isCorrect = selectedOption === (view ? view.correta : question.correta);
+
+    // Increment attempts
+    quizAttempts.set(questionKey, attempts + 1);
+
+    // Disable all options temporarily
+    const inputs = document.querySelectorAll('#quiz-options .quiz-option input');
+    inputs.forEach(input => input.disabled = true);
+
+    const selectedEl = document.getElementById(`option-${selectedOption}`);
+
+    if (isCorrect) {
+        selectedEl.classList.add('correct');
+        showQuizFeedback('Correto! ' + (question.explicacao || ''), 'success');
+        quizAnswers.set(questionKey, { correct: true, attempts: attempts + 1 });
+        
+        // Enable the next/finish button, but do not auto-advance
+        setTimeout(() => {
+            const quizRoot2 = document.getElementById(`slide-quiz-${currentQuiz}`);
+            const next = quizRoot2 ? quizRoot2.querySelector('#quiz-next-btn') : null;
+            if (next) { next.disabled = false; next.style.display='inline-flex'; }
+        }, 600);
+    } else {
+        selectedEl.classList.add('incorrect');
+        // Não revela a correta
+        if (attempts + 1 >= 2) {
+            // Segunda tentativa errada
+            const concept = (question.conceitos && question.conceitos.length) ? question.conceitos[0] : null;
+            showQuizFeedback(
+                'Incorreto. Reveja o conteúdo do conceito trabalhado.' + (concept ? `\nTópico: ${humanizeConcept(concept)}` : ''),
+                'error'
+            );
+            quizAnswers.set(questionKey, { correct: false, attempts: attempts + 1 });
+
+            const nextBtn = (() => { const r=document.getElementById(`slide-quiz-${currentQuiz}`); return r ? r.querySelector('#quiz-next-btn') : null; })();
+            const rootNav = document.getElementById(`slide-quiz-${currentQuiz}`);
+            const prevBtn = rootNav ? rootNav.querySelector('#quiz-prev-btn') : null;
+            if (nextBtn) { nextBtn.disabled = true; nextBtn.style.display='none'; }
+            if (prevBtn) { prevBtn.disabled = true; prevBtn.style.display='none'; }
+
+            const rootFB = document.getElementById(`slide-quiz-${currentQuiz}`);
+            const fb = rootFB ? rootFB.querySelector('#quiz-feedback') : null;
+            if (fb && !rootFB.querySelector('#review-btn')) { lockMenu();
+                
+                const info = document.createElement('div');
+                info.className = 'review-instruction';
+                info.textContent = `Você atingiu o número máximo de tentativas nesta questão. Revise o conteúdo sobre ${humanizeConcept(concept)} no capítulo ${getCurrentChapter()?.numero || '?'} antes de tentar novamente o quiz. Clique no botão abaixo para continuar.`;
+                lockMenu();
+                lockMenu();
+                const wrap = document.createElement('div');
+                wrap.className = 'review-btn-wrap';
+                const btn = document.createElement('button');
+                btn.id = 'review-btn';
+                btn.className = 'review-btn';
+                btn.textContent = '🔁 Revisar este conteúdo';
+                btn.onclick = () => { 
+ const specific = (question.explicacao ? '💡 ' + question.explicacao : 'Revise este tópico.');
+                    if (concept) {
+                        // Restaurar vidas (tentativas) ao revisar
+                        quizAttempts.set(questionKey, 0);
+                        updateAttemptsIndicator(questionKey);
+                        let slideNum = conceptToSlide(concept);
+                        if (!slideNum) {
+                            const ch = getCurrentChapter();
+                            if (ch && Array.isArray(ch.slides) && ch.slides.length) {
+                                const existing = ch.slides.filter(n => document.getElementById('slide-'+n));
+                                slideNum = existing.length ? existing[0] : ch.slides[0];
+                            } else {
+                                slideNum = 1;
+                            }
+                        }
+                        unlockMenu();
+                        goToSlide(slideNum);
+                        setTimeout(() => {
+                                const slide = document.getElementById('slide-' + slideNum);
+                                if (slide) {
+
+                                    let banner = document.createElement('div');
+                                    banner.className = 'review-highlight';
+                                    banner.innerHTML = '<strong>Revisão Recomendada</strong><br>' + specific + '<div style="margin-top:8px;"></div>';
+                                    const content = slide.querySelector('.slide-content') || slide;
+                                    content.prepend(banner);
+                                    setTimeout(() => banner.remove(), 8000);
+                                }
+                            }, 250);
+                    }
+                    
+unlockMenu();
+
+                    const next2 = (() => { const r=document.getElementById(`slide-quiz-${currentQuiz}`); return r ? r.querySelector('#quiz-next-btn') : null; })();
+                    const prev2 = document.getElementById('quiz-prev-btn');
+                    if (next2) { next2.disabled = false; next2.style.display='inline-flex'; }
+                    if (prev2) { prev2.disabled = false; prev2.style.display='inline-flex'; }
+                };
+                wrap.appendChild(btn);
+                fb.appendChild(wrap);
+            }
+        } else {
+            
+            // Primeira tentativa errada: permitir nova tentativa
+            showQuizFeedback('Você tem mais uma tentativa.', 'warning');
+            // Reabilita imediatamente e mantém o aviso visível
+            inputs.forEach(i => i.disabled = false);
+            selectedEl.classList.remove('incorrect');
+            // Não removemos o feedback aqui para que continue visível até o usuário responder novamente
+        }
+    }
+
+    updateAttemptsIndicator(questionKey);
+}
+
+        function showQuizFeedback(message, type) {
+            const qr = document.getElementById(`slide-quiz-${currentQuiz}`);
+            const feedback = qr ? qr.querySelector('#quiz-feedback') : null;
+            feedback.textContent = message;
+            feedback.className = `quiz-feedback show ${type}`;
+        }
+
+        function updateAttemptsIndicator(questionKey) {
+            const attempts = quizAttempts.get(questionKey) || 0;
+            const root = document.getElementById(`slide-quiz-${currentQuiz}`);
+            const indicators = root ? root.querySelectorAll('#quiz-attempts .attempt-indicator') : [];
+            
+            indicators.forEach((indicator, index) => {
+                if (index < attempts) {
+                    indicator.classList.add('used');
+                } else {
+                    indicator.classList.remove('used');
+                }
+            });
+        }
+
+        function updateQuizNavigation() {
+            const rootNav = document.getElementById(`slide-quiz-${currentQuiz}`);
+            const prevBtn = rootNav ? rootNav.querySelector('#quiz-prev-btn') : null;
+            const nextBtn = (() => { const r=document.getElementById(`slide-quiz-${currentQuiz}`); return r ? r.querySelector('#quiz-next-btn') : null; })();
+            const questions = currentQuiz === 'final' ? quizzesData['final'] : quizzesData[currentQuiz.toString()];
+            
+            // Update navigation buttons
+            if (prevBtn) prevBtn.disabled = currentQuizQuestion === 0;
+            if (nextBtn) nextBtn.disabled = true; // Will be enabled after answering
+            
+            if (currentQuizQuestion === questions.length - 1) {
+                nextBtn.textContent = 'Finalizar Quiz →';
+                nextBtn.onclick = function() { finishQuiz(); return false; };
+            } else {
+                nextBtn.textContent = 'Próxima Questão →';
+                nextBtn.onclick = function() { nextQuizQuestion(); return false; };
+            }
+        }
+
+        function nextQuizQuestion() {
+            const questions = currentQuiz === 'final' ? quizzesData['final'] : quizzesData[currentQuiz.toString()];
+            
+            if (currentQuizQuestion < questions.length - 1) {
+                currentQuizQuestion++;
+                loadQuizQuestion();
+            }
+        }
+
+        function previousQuizQuestion() {
+            if (currentQuizQuestion > 0) {
+                currentQuizQuestion--;
+                loadQuizQuestion();
+            }
+        }
+
+        
+function finishQuiz() {
+    // ADJUSTMENT 1: Handle final quiz completion
+    if (currentQuiz === 'final') {
+        goToConclusion();
+        return; // Stop execution here for the final quiz
+    }
+            
+    const questions = quizzesData[currentQuiz.toString()];
+    let correctAnswers = 0;
+    let wrongConcepts = new Set();
+
+    for (let i = 0; i < questions.length; i++) {
+        const key = `${currentQuiz}-${i}`;
+        const ans = quizAnswers.get(key);
+        if (ans && ans.correct) correctAnswers++;
+        else if (questions[i].conceitos) questions[i].conceitos.forEach(c => wrongConcepts.add(c));
+    }
+
+    // Armazena resultado
+    chapterResults.set(currentQuiz, {
+        correct: correctAnswers,
+        total: questions.length,
+        wrongConcepts: wrongConcepts
+    });
+
+    if (correctAnswers < questions.length) {
+        alert('Você precisa acertar todas as questões para concluir este capítulo. Revise o conteúdo e tente novamente.');
+        returnToChapterBeginning(parseInt(currentQuiz), wrongConcepts);
+        return;
+    }
+    
+    showChapterCompletion(parseInt(currentQuiz));
+}
+
+        function returnToChapterBeginning(chapterNumber, wrongConcepts) {
+            const chapter = capitulos.find(c => c.numero === chapterNumber);
+            const firstSlideOfChapter = Math.min(...chapter.slides);
+            
+            // Enable recovery mode
+            recoveryMode = true;
+            highlightedConcepts = wrongConcepts;
+            
+            // Reset quiz data for this chapter
+            for (let i = 0; i < quizzesData[chapterNumber].length; i++) {
+                const questionKey = `${chapterNumber}-${i}`;
+                quizAttempts.delete(questionKey);
+                quizAnswers.delete(questionKey);
+            }
+            
+            // Highlight related slides in sidebar
+            highlightConceptSlides(wrongConcepts);
+            
+            // Go to first slide of chapter
+            goToSlide(firstSlideOfChapter);
+            
+            // Show recovery message
+            setTimeout(() => {
+                const recoveryMessage = `
+                    <div class="recovery-mode">
+                        <div class="recovery-title">⚠️ Revisão Necessária</div>
+                        <div class="recovery-content">
+                            <p>Você precisa revisar o conteúdo do Capítulo ${chapterNumber}. Os slides destacados no menu lateral contêm os tópicos que você deve reestudiar antes de tentar o quiz novamente.</p>
+                            <div class="recovery-concepts">
+                                <strong>📖 Revise especialmente:</strong> ${Array.from(wrongConcepts).map(humanizeConcept).join(', ')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                const currentSlideElement = document.getElementById(`slide-${currentSlide}`);
+                if (currentSlideElement) {
+                    const slideContent = currentSlideElement.querySelector('.slide-content');
+                    if (slideContent && !slideContent.querySelector('.recovery-mode')) {
+                        slideContent.insertAdjacentHTML('afterbegin', recoveryMessage);
+                    }
+                }
+            }, 100);
+        }
+
+        function highlightConceptSlides(wrongConcepts) {
+            // Highlight all slides of the failed chapter for review
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                const slideNumber = link.onclick?.toString().match(/goToSlide\((\d+)\)/)?.[1];
+                if (slideNumber && currentQuiz !== 'final') {
+                    const chapter = capitulos.find(c => c.numero === parseInt(currentQuiz));
+                    if (chapter && chapter.slides.includes(parseInt(slideNumber))) {
+                        link.classList.add('highlighted');
+                    }
+                }
+            });
+        }
+
+        
+
+
+function showChapterCompletion(chapterNumber) {
+    try {
+        completedChapters.add(chapterNumber);
+    } catch(e) {}
+
+    // Close any active quiz slide and show modal
+    hideAllSlides();
+    const modal = document.getElementById('completionModal');
+    const next = document.getElementById('completionNextBtn');
+    if (modal && next) {
+        modal.style.display = 'flex';
+        // Ensure only one handler
+        next.onclick = function(e){
+            e.preventDefault();
+            modal.style.display = 'none';
+            goToNextChapter();
+        };
+    } else {
+        // Fallback: alert then go
+        alert('Parabéns! Você concluiu este capítulo. Seguiremos para o próximo.');
+        goToNextChapter();
+    }
+}
+
+function goToNextChapter() {
+            // Remove temporary congratulations slide
+            const tempSlides = document.querySelectorAll('.slide:not([id])');
+            tempSlides.forEach(slide => slide.remove());
+            
+            const lastChapterNumber = capitulos[capitulos.length - 1].numero;
+            const currentQuizNumber = parseInt(currentQuiz);
+            
+            // If we just finished the last chapter, go to the transition slide
+            if (currentQuizNumber === lastChapterNumber) {
+                goToSlide(25);
+                return;
+            }
+
+            // Find next chapter or content
+            const nextChapterIndex = capitulos.findIndex(c => c.numero === currentQuizNumber) + 1;
+            
+            if (nextChapterIndex < capitulos.length) {
+                const nextChapter = capitulos[nextChapterIndex];
+                const firstSlideOfNextChapter = Math.min(...nextChapter.slides);
+                if (typeof firstSlideOfNextChapter === 'number' && !isNaN(firstSlideOfNextChapter)) { 
+                    goToSlide(firstSlideOfNextChapter); 
+                }
+            } else {
+                // This case is now handled by the check for lastChapterNumber above
+                goToSlide(25);
+            }
+        }
+
+        // Navigation functions
+        function nextSlide() {
+    console.log('nextSlide called, currentSlide:', currentSlide);
+    const chapter = getCurrentChapter();
+
+    if (currentSlide === 25) {
+        startQuiz('final');
+        return;
+    }
+
+    if (!chapter) { 
+        // Handle standalone slides like slide 25
+        if(slidesData.find(s => s.numero === currentSlide + 1)) {
+            goToSlide(currentSlide + 1);
+        }
+        return; 
+    }
+
+    const existingSlides = chapter.slides.filter(n => document.getElementById('slide-'+n));
+    if (!existingSlides.length) { console.warn('Nenhum slide existente para o capítulo', chapter.numero); return; }
+    
+    const idx = existingSlides.indexOf(currentSlide);
+    if (idx === -1) { 
+        console.warn('Slide atual não está na lista do capítulo. Indo ao primeiro disponível.');
+        goToSlide(existingSlides[0]); 
+        return; 
+    }
+    
+    if (idx === existingSlides.length - 1) {
+        completedSlides.add(currentSlide);
+        startQuiz(chapter.numero);
+        return;
+    }
+
+    const nextNum = existingSlides[idx + 1];
+    if (typeof nextNum === 'number') {
+        goToSlide(nextNum);
+    } else {
+        console.error('Próximo slide inválido calculado:', nextNum);
+    }
+}
+
+        function previousSlide() {
+    console.log('previousSlide called, currentSlide:', currentSlide);
+    const chapter = getCurrentChapter();
+    if (!chapter) { 
+        console.error('Capítulo atual não encontrado.'); 
+        // Attempt to go to the absolute previous slide if not in a chapter
+        if (currentSlide > 1) goToSlide(currentSlide - 1);
+        return; 
+    }
+    const existingSlides = chapter.slides.filter(n => document.getElementById('slide-'+n));
+    if (!existingSlides.length) return;
+    const idx = existingSlides.indexOf(currentSlide);
+    if (idx > 0) {
+        goToSlide(existingSlides[idx - 1]);
+        return;
+    }
+    // If it's the first slide of the chapter, go to the previous chapter's quiz or last slide.
+    const currentIndex = capitulos.findIndex(c => c.numero === chapter.numero);
+    if (currentIndex > 0) {
+        const prevChapter = capitulos[currentIndex - 1];
+        const prevExisting = prevChapter.slides.filter(n => document.getElementById('slide-'+n));
+        if (prevExisting.length) {
+            goToSlide(prevExisting[prevExisting.length - 1]);
+        }
+    }
+}
+
+        function goToSlide(index) {
+            console.log('goToSlide called with index:', index);
+            
+            // Check if can access this slide
+            if (!canAccessSlide(index)) {
+                const targetChapter = capitulos.find(cap => cap.slides.includes(index));
+                if (targetChapter && targetChapter.numero > 1) {
+                    alert(`🔒 Para acessar este conteúdo, você precisa completar o Capítulo ${targetChapter.numero - 1} primeiro.`);
+                } else if (targetChapter) {
+                    alert('🔒 Você precisa completar os slides anteriores deste capítulo primeiro.');
+                }
+                return;
+            }
+            
+            currentSlide = index;
+            completedSlides.add(index);
+            
+            // Disable recovery mode if going to a different section
+            const currentChapter = getCurrentChapter();
+            const currentQuizNumber = currentQuiz ? parseInt(currentQuiz) : null;
+            if (!currentChapter || !recoveryMode || currentChapter.numero !== currentQuizNumber) {
+                recoveryMode = false;
+                highlightedConcepts.clear();
+                clearHighlightedSlides();
+            }
+            
+            updateSlideDisplay();
+            updateProgress();
+            updateSidebarAccess();
+            closeSidebar();
+            
+            // Auto-scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function goToConclusion() {
+            hideAllSlides();
+            const conclusionSlide = document.getElementById('slide-conclusion');
+            if (conclusionSlide) {
+                conclusionSlide.classList.add('active');
+                currentSlide = 999; // Use a special number for conclusion state
+            }
+            updateSlideDisplay(); // Call this to hide nav buttons
+            closeSidebar();
+        }
+
+        function getCurrentChapter() {
+            return capitulos.find(cap => cap.slides.includes(currentSlide));
+        }
+
+        function isLastSlideOfChapter(slideIndex, chapter) {
+            if (!chapter || !Array.isArray(chapter.slides) || chapter.slides.length === 0) return false;
+            const last = Math.max(...chapter.slides);
+            return slideIndex >= last;
+        }
+        
+        function isLastSlideOfCurrentChapter(){ const chapter = getCurrentChapter(); return chapter && currentSlide === Math.max(...chapter.slides); }
+        
+        function canAccessSlide(slideNumber) {
+    if (slideNumber === 1) return true;
+
+    // Special check for transition slide 25
+    if (slideNumber === 25) {
+        const lastChapter = capitulos[capitulos.length - 1];
+        return completedChapters.has(lastChapter.numero) || completedChapters.has(String(lastChapter.numero));
+    }
+
+    const targetChapter = capitulos.find(cap => cap.slides.includes(slideNumber));
+    if (!targetChapter) return true;
+
+    // Check previous chapters only when entering the chapter
+    const firstExisting = Math.min(...targetChapter.slides.filter(n => document.getElementById('slide-' + n)));
+    if (slideNumber === firstExisting) {
+        for (let i = 1; i < targetChapter.numero; i++) {
+            if (!completedChapters.has(i) && !completedChapters.has(String(i))) {
+                return false;
+            }
+        }
+    }
+
+    // Check previous slides within the same chapter
+    const existingSlidesInChapter = targetChapter.slides.filter(n => document.getElementById('slide-' + n));
+    const targetIndex = existingSlidesInChapter.indexOf(slideNumber);
+    for (let i = 0; i < targetIndex; i++) {
+        if (!completedSlides.has(existingSlidesInChapter[i])) return false;
+    }
+    return true;
+}
+        
+        function canAccessQuiz(chapterNumber) {
+    if (chapterNumber === 'final') {
+        // Must have completed all chapters AND seen the transition slide
+        return completedChapters.size === capitulos.length && completedSlides.has(25);
+    }
+    const chapter = capitulos.find(c => c.numero === parseInt(chapterNumber));
+    if (!chapter) return false;
+    const existingSlides = chapter.slides.filter(n => document.getElementById('slide-'+n));
+    if (existingSlides.length === 0) return true; // No slides to block quiz
+    return existingSlides.every(n => completedSlides.has(n));
+}
+            
+
+
+        function countTotalSlides() {
+            return slidesData.length; // total de slides de conteúdo
+        }
+
+        function clearHighlightedSlides() {
+            document.querySelectorAll('.nav-link.highlighted').forEach(link => {
+                link.classList.remove('highlighted');
+            });
+        }
+
+        function hideAllSlides() {
+            const slides = document.querySelectorAll('.slide');
+            console.log('Hiding', slides.length, 'slides');
+            slides.forEach(slide => {
+                slide.classList.remove('active');
+            });
+        }
+        
+        // Fix sidebar toggle functionality
+        function initializeSidebar() {
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            console.log('Initializing sidebar', {sidebarToggle, sidebar, overlay});
+            
+            if (sidebarToggle && sidebar && overlay) {
+                console.log('Sidebar elements found, initializing');
+                
+                // Ensure sidebar starts closed
+                sidebar.classList.remove('open');
+                overlay.classList.remove('show');
+                sidebarOpen = false;
+                
+                console.log('Sidebar initialized successfully');
+            } else {
+                console.error('Failed to find sidebar elements');
+            }
+        }
+
+        // Update slide display
+        
+function updateSlideDisplay() {
+    // Hide all slides
+    document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+
+    // Check for conclusion state first
+    if (currentSlide === 999) {
+        const conclusionSlide = document.getElementById('slide-conclusion');
+        if (conclusionSlide) conclusionSlide.classList.add('active');
+    } else {
+        const activeSlide = document.getElementById('slide-' + currentSlide);
+        if (activeSlide) activeSlide.classList.add('active');
+    }
+
+    // If we are showing a content slide, we are not in a quiz.
+    if(currentSlide !== 999 && !document.querySelector(`.slide.active[id^="slide-quiz-"]`)){
+        currentQuiz = null;
+    }
+    updateActiveNav();
+    
+    // Ensure navigation is visible by default
+    const navContainer = document.querySelector('.navigation');
+    if(navContainer) navContainer.style.display = 'flex';
+
+    // Update navigation buttons
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    
+    if (!prevBtn || !nextBtn) {
+        console.error("Navigation buttons not found!");
+        return;
+    }
+    
+    // Handle specific slides that hide navigation, like conclusion
+    const activeSlideElement = document.querySelector('.slide.active');
+    if (activeSlideElement && activeSlideElement.id === 'slide-conclusion') {
+        prevBtn.style.display = 'none';
+        nextBtn.style.display = 'none';
+        updateProgress();
+        updateSidebarAccess();
+        return; // Stop further processing for conclusion slide
+    }
+
+    // Previous button visibility
+    prevBtn.disabled = (currentSlide <= 1);
+    prevBtn.style.display = (currentSlide <= 1) ? 'none' : 'inline-flex';
+    
+    // Default state for Next button
+    nextBtn.style.display = 'inline-flex';
+    nextBtn.disabled = false;
+
+    // Logic for transition slide to Final Quiz
+    if (currentSlide === 25) {
+        nextBtn.innerHTML = 'Iniciar Quiz Final →';
+        nextBtn.onclick = () => startQuiz('final');
+    } else {
+        const chapter = getCurrentChapter();
+        if (chapter) {
+            const existingSlides = chapter.slides.filter(n => document.getElementById('slide-'+n));
+            const isLast = existingSlides.indexOf(currentSlide) === existingSlides.length - 1;
+            
+            if (isLast) {
+                nextBtn.innerHTML = `Quiz Capítulo ${chapter.numero} →`;
+                nextBtn.onclick = () => startQuiz(chapter.numero);
+            } else {
+                nextBtn.innerHTML = 'Próximo →';
+                nextBtn.onclick = () => nextSlide();
+            }
+        } else {
+            // Fallback for any other slide not in a defined chapter
+            nextBtn.innerHTML = 'Próximo →';
+            nextBtn.onclick = () => nextSlide();
+        }
+    }
+
+    updateProgress();
+    updateSidebarAccess();
+}
+
+        function updateProgress() {
+            const totalContent = slidesData.length;
+            const totalQuizzes = Object.keys(quizzesData).length; // 4 capítulos + final
+            const totalUnits = totalContent + totalQuizzes + 1; // +1 conclusão
+
+            // Conteúdo visto
+            const contentDone = completedSlides.size;
+
+            // Quizzes concluídos (capítulos)
+            const chapterQuizDone = completedChapters.size;
+
+            // Quiz final concluído?
+            const finalDone = chapterResults.has('final') ? 1 : 0;
+
+            // Conclusão visitada?
+            const conclusionVisited = (currentSlide === 999) ? 1 : 0;
+
+            const done = contentDone + chapterQuizDone + finalDone + conclusionVisited;
+            const percent = Math.max(0, Math.min(100, Math.round((done / totalUnits) * 100)));
+
+            const bar = document.getElementById('progressBar');
+            if (bar) bar.style.width = percent + '%';
+
+            const txt = document.getElementById('moduleProgressText');
+            if (txt) txt.textContent = 'Progresso: ' + percent + '%';
+        }
+
+        // Sidebar functions
+        function toggleSidebar() {
+            sidebarOpen = !sidebarOpen;
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            console.log('Toggling sidebar:', sidebarOpen);
+            
+            if (sidebar && overlay) {
+                if (sidebarOpen) {
+                    sidebar.classList.add('open');
+                    overlay.classList.add('show');
+                    console.log('Sidebar opened');
+                } else {
+                    sidebar.classList.remove('open');
+                    overlay.classList.remove('show');
+                    console.log('Sidebar closed');
+                }
+            } else {
+                console.error('Sidebar or overlay elements not found');
+            }
+        }
+
+        function closeSidebar() {
+            sidebarOpen = false;
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            if (sidebar && overlay) {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('show');
+                console.log('Sidebar closed');
+            }
+        }
+
+        // Restart module
+        function restartModule() {
+            if (confirm('Tem certeza que deseja reiniciar o módulo? Todo o progresso será perdido.')) {
+                currentSlide = 1;
+                currentQuizQuestion = 0;
+                currentQuiz = null;
+                completedSlides = new Set([1]);
+                completedChapters = new Set();
+                quizAttempts = new Map();
+                quizAnswers = new Map();
+                chapterResults = new Map();
+                recoveryMode = false;
+                highlightedConcepts = new Set();
+                
+                clearHighlightedSlides();
+                goToSlide(1); // Go to slide 1 which will trigger display update
+                closeSidebar();
+            }
+        }
+
+        // Bind events
+        function bindEvents() {
+            console.log('Binding events');
+            
+            // Navigation buttons - remove existing onclick first
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            if (prevBtn) {
+                prevBtn.removeAttribute('onclick');
+                prevBtn.onclick = function(e) {
+                    console.log('Previous button clicked');
+                    e.preventDefault();
+                    e.stopPropagation();
+                    previousSlide();
+                    return false;
+                };
+                console.log('Previous button event bound');
+            }
+            
+            if (nextBtn) {
+                nextBtn.removeAttribute('onclick');
+                nextBtn.onclick = function(e) {
+                    console.log('Next button clicked');
+                    e.preventDefault();
+                    e.stopPropagation();
+                    nextSlide();
+                    return false;
+                };
+                console.log('Next button event bound');
+            }
+            
+            // Sidebar toggle
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            if (sidebarToggle) {
+                sidebarToggle.removeAttribute('onclick');
+                sidebarToggle.onclick = function(e) {
+                    console.log('Sidebar toggle clicked');
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleSidebar();
+                    return false;
+                };
+                console.log('Sidebar toggle event bound');
+            }
+            
+            // Sidebar overlay
+            const overlay = document.getElementById('sidebarOverlay');
+            if (overlay) {
+                overlay.onclick = function(e) {
+                    console.log('Overlay clicked');
+                    e.preventDefault();
+                    closeSidebar();
+                    return false;
+                };
+            }
+            
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft' && currentSlide > 1) {
+                    previousSlide();
+                } else if (e.key === 'ArrowRight') {
+                    const activeSlide = document.querySelector('.slide.active');
+                    if (activeSlide && activeSlide.id !== 'slide-conclusion') {
+                        nextSlide();
+                    }
+                } else if (e.key === 'Escape') {
+                    closeSidebar();
+                }
+            });
+            
+            console.log('Events bound successfully');
+        }
+
+        // Initialize app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, initializing app');
+            try {
+                // Small delay to ensure DOM is fully ready
+                setTimeout(() => {
+                    initializeApp();
+                    console.log('App initialization complete');
+                }, 50);
+            } catch (error) {
+                console.error('App initialization failed:', error);
+            }
+        });
+        
+        // Global functions for onclick handlers
+        window.goToSlide = goToSlide;
+        window.startQuiz = startQuiz;
+        window.nextSlide = nextSlide;
+        window.previousSlide = previousSlide;
+        window.nextQuizQuestion = nextQuizQuestion;
+        window.previousQuizQuestion = previousQuizQuestion;
+        window.handleQuizAnswer = handleQuizAnswer;
+        window.finishQuiz = finishQuiz;
+        window.goToConclusion = goToConclusion;
+        window.restartModule = restartModule;
+        window.goToNextChapter = goToNextChapter;
+        window.toggleSidebar = toggleSidebar;
+        window.closeSidebar = closeSidebar;
+        
+        // Debug function to check app state
+        window.debugAppState = function() {
+            console.log('=== APP DEBUG STATE ===');
+            console.log('Current slide:', currentSlide);
+            console.log('Completed slides:', Array.from(completedSlides));
+            console.log('Completed chapters:', Array.from(completedChapters));
+            console.log('Total slides in data:', slidesData.length);
+            console.log('Sidebar open:', sidebarOpen);
+            
+            const activeSlides = document.querySelectorAll('.slide.active');
+            console.log('Active slides:', activeSlides.length, Array.from(activeSlides).map(s => s.id));
+            
+            const allSlides = document.querySelectorAll('.slide');
+            console.log('Total slides in DOM:', allSlides.length, Array.from(allSlides).map(s => s.id));
+            
+            const navLinks = document.querySelectorAll('.nav-link');
+            console.log('Nav links:', navLinks.length);
+        };
+        
+        // Emergency reset function
+        window.emergencyReset = function() {
+            console.log('Emergency reset triggered');
+            currentSlide = 1;
+            completedSlides = new Set([1]);
+            updateSlideDisplay();
+            updateProgress();
+        };
+        
+        console.log('All global functions registered');
+    
+// === Helpers for concept-based review (added) ===
+function conceptToSlide(concept) {
+    // This map should be updated if slide numbers change
+    const map = {
+        'contexto_cate': 9, 'tarefa_cate': 11, 'angulo_vs_estilo': 10, 'tarefa_revisao': 11, 'cate_cenario': 8,
+        'matriz_raci': 13, 'analise_dados': 14, 'brief_decisao': 12, 'conteudo_ppt': 15, 'raci_cenario': 13,
+        'expressoes_idiomaticas': 16, 'adaptacao_eua': 16, 'validacao_humana': 17, 'referencias_culturais': 16, 'adaptacao_cenario': 18,
+        'checagem_factual': 19, 'checklist_conformidade': 19, 'documentacao_prompts': 20, 'revisao_critica': 19, 'qa_manual': 19
+    };
+    return map[concept] || null;
+}
+
+function humanizeConcept(concept) {
+    const dict = {
+        'contexto_cate': 'Contexto (C do CATE)', 'tarefa_cate': 'Tarefa (T do CATE)', 'angulo_vs_estilo': 'Diferença entre Ângulo e Estilo', 'tarefa_revisao': 'Uso da IA para Revisão', 'cate_cenario': 'Aplicação Prática do CATE',
+        'matriz_raci': 'Criação de Matriz RACI', 'analise_dados': 'Análise de Dados com IA', 'brief_decisao': 'Criação de Brief de Decisão', 'conteudo_ppt': 'Geração de Conteúdo para Apresentações', 'raci_cenario': 'Aplicação de RACI em Cenários',
+        'expressoes_idiomaticas': 'Adaptação de Expressões Idiomáticas', 'adaptacao_eua': 'Adaptação Cultural', 'validacao_humana': 'Validação com Falante Nativo', 'referencias_culturais': 'Adaptação de Referências Culturais', 'adaptacao_cenario': 'Adaptação em Cenários Práticos',
+        'checagem_factual': 'Checagem Factual Obrigatória', 'checklist_conformidade': 'Checklist e Conformidade', 'documentacao_prompts': 'Documentação de Prompts', 'revisao_critica': 'Revisão Crítica da Saída da IA', 'qa_manual': 'Verificação Manual em QA'
+    };
+    return dict[concept] || concept.replace(/_/g, ' ');
+}
+
+
+</script>
+</body>
+</html>
